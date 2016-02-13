@@ -11,68 +11,151 @@
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 <body>
- 	<a name = "top"> </a>
-<div class="container" style="height:150px;padding:10px" >
-    <div class = "row" style="background-color:yellow">
+    <!--Bootsnip code -->
+
+<div class = "container">
+    
+<div class="container" style="height:200px;padding:6px" >
+    <div class = "row" style="background-color:#00FFFF">
         <div class ="col-md-4">
             <h1>Welcome to DBay </h1> <br />
-            <p>You can search for products using the seach field <br/>
+            <p style="font-style:italic">You can search for products using the seach field <br/>
              alternatively you may browse by category !</p>
         </div>
  <!-- login_page.php deals with the action with validating user login -->
         <div class="col-md-4">
             <form style="text-align:left" action = "" method = "get">
-                <i class="fa search">search</i>:<input type = "text" name = "search"><br />
-                <input type="submit" class="btn btn-info" value="go">
+                 <h4 class="form-signin-heading">Enter the name of an item</h4>
+                <input type="text" class="form-control" name="Search" placeholder="Search" required="" autofocus="" />
+                
+                 <button class="btn btn-lg btn-primary "  name="Submit" value="Login" type="Submit"><span class="glyphicon glyphicon-search"></span>Search
+                </button>     
             </form>
         </div>
         <div class="col-md-4">
-            <form style ="text-align:right" action = "" method ="post">
- 	           username: <input type = "text" name = "username"><br />
- 	           password: <input type = "text" name = "password"><br />
-            <input type="submit" class="btn btn-info" value="login">
-            </form>
+            <div class="wrapper" style ="width:300px">
+                <form action="" method="post" name="Login_Form" class="form-signin">       
+                <h4 class="form-signin-heading">Please Sign In</h4>
+              
+                <input type="text" class="form-control" name="Username" placeholder="Username" required="" autofocus="" />
+                <input type="password" class="form-control" name="Password" placeholder="Password" required=""/>            
+             
+                <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Login</button>            
+               </form>        
+               <a href=#>sign up</a> <br/>
+               <a href=#>forgot login details </a>
+            </div>
+            
         </div>
     </div>
 </div>
-<div class = "container" style="padding:20px">
+    <div class="container" style="padding:0px" >
+         <ul class="nav navbar-nav">
+         <li class="dropdown" style="background-color:green">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Category1  <span class="caret"></span></a>
+          <ul class="dropdown-menu forAnimate" role="menu">
+            <li><a href="#">subcat1</a></li>
+            <li><a href="#">subcat2</a></li>
+          </ul>
+        <li class="dropdown" style="background-color:yellow;color:black">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Category2  <span class="caret"></span></a>
+          <ul class="dropdown-menu forAnimate" role="menu">
+            <li><a href="#">subcat1</a></li>
+            <li><a href="#">subcat2</a></li>
+          </ul>
+           <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Category3  <span class="caret"></span></a>
+          <ul class="dropdown-menu forAnimate" role="menu">
+            <li><a href="#">subcat1</a></li>
+            <li><a href="#">subcat2</a></li>
+          </ul>
+        </li>          
+       
+      </ul>
+    </div>
+  
+
+
+
+<div class = "container" style="padding:20px width:300px">
+    <p style="font-style:italic"> Here you have the most popular autions happing at the moment</p>
     <div class ="jumbotron">
         <h2> Hot Auctions </h2>
     </div>
-    <p> Here you have the most popular autions happing at the moment</p>
 </div>
-<h2 style="background-color:yellow">Browse by category </h2>
-<!-- List all possible categories and elements in them -->
 
-    <div class = "row" >
-        <button type ="button" class = "btn btn-info" style="background-color:green">Category1 <span class="badge">10
-        </span></button>
-    </div>
-    <div class = "row" >
-         <button type ="button" class = "btn btn-info" style="background-color:blue">Category2 <span class="badge">15</span></button>
-    </div>
-    <div class = "row" >
-         <button type ="button" class = "btn btn-info">Category3 <span class="badge">5
-         </span></button>
-    </div>
 <!-- Footer section -->
  <footer>
-        <div class = "row">
-            <div class = "col-md-3">
-                <a href="#">Help</a>
-            </div>
-            <div class = "col-md-3">
-                <a href="#">About</a>
-            </div>
-            <div class = "col-md-3">
-                <a href="#">Contact us</a>
-            </div>
-            <div class = "col-md-3">
-                <a href="#">Legal</a>
-            </div>
-            
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>More</h3>
+
+            <div class="tabbable-panel">
+                <div class="tabbable-line">
+                    <ul class="nav nav-tabs ">
+                        <li class="active">
+                            <a href="#tab_default_1" data-toggle="tab">
+                            Help </a>
+                        </li>
+                        <li>
+                            <a href="#tab_default_2" data-toggle="tab">
+                            About </a>
+                        </li>
+                        <li>
+                            <a href="#tab_default_3" data-toggle="tab">
+                            Legal </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_default_1">
+                            <p>
+                                I'm in Tab 1.
+                            </p>
+                            <p>
+                                Duis autem eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.
+                            </p>
+                            <p>
+                                <a class="btn btn-success" href="http://j.mp/metronictheme" target="_blank">
+                                    Learn more...
+                                </a>
+                            </p>
+                        </div>
+                        <div class="tab-pane" id="tab_default_2">
+                            <p>
+                                Howdy, I'm in Tab 2.
+                            </p>
+                            <p>
+                                Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation.
+                            </p>
+                            <p>
+                                <a class="btn btn-warning" href="http://j.mp/metronictheme" target="_blank">
+                                    Click for more features...
+                                </a>
+                            </p>
+                        </div>
+                        <div class="tab-pane" id="tab_default_3">
+                            <p>
+                                Howdy, I'm in Tab 3.
+                            </p>
+                            <p>
+                                Duis autem vel eum iriure dolor in hendrerit in vulputate. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat
+                            </p>
+                            <p>
+                                <a class="btn btn-info" href="http://j.mp/metronictheme" target="_blank">
+                                    Learn more...
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
  </footer>
-       <p> <a href = "#top" > Back to top </a></p>
+</div>
+   
 </body>
 
 </html>
