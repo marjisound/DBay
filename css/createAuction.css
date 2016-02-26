@@ -1,0 +1,153 @@
+/**********   Navbar design  ***************/
+
+#login-dp{
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow:hidden;
+    background-color:rgba(255,255,255,.8);
+}
+#login-dp .help-block{
+    font-size:12px    
+}
+#login-dp .bottom{
+    background-color:rgba(255,255,255,.8);
+    border-top:1px solid #ddd;
+    clear:both;
+    padding:14px;
+}
+#login-dp .social-buttons{
+    margin:12px 0    
+}
+#login-dp .social-buttons a{
+    width: 49%;
+}
+#login-dp .form-group {
+    margin-bottom: 10px;
+}
+.btn-fb{
+    color: #fff;
+    background-color:#3b5998;
+}
+.btn-fb:hover{
+    color: #fff;
+    background-color:#496ebc 
+}
+.btn-tw{
+    color: #fff;
+    background-color:#55acee;
+}
+.btn-tw:hover{
+    color: #fff;
+    background-color:#59b5fa;
+}
+@media(max-width:768px){
+    #login-dp{
+        background-color: inherit;
+        color: #fff;
+    }
+    #login-dp .bottom{
+        background-color: inherit;
+        border-top:0 none;
+    }
+}
+
+#box {
+	left: 50%;
+	margin-left:  -450px;
+	position: relative;
+	width: 900px;
+}
+#header {
+	background: url(http://pics.ebaystatic.com/aw/pics/easylister/header_bg.gif) repeat-x bottom;
+	background-color: #ffd739;
+	border-color: #ffb50c;
+	border-style: solid;
+	border-width: 1px 1px 0 1px;
+	margin-top: 10px;
+	height: 50px;
+}
+#headerTxt h1 {
+    font-size: medium;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 15px;
+}
+#auctionTitle div{
+    background-color: #c67b01;
+}
+#auctionPic div{
+    background-color: #c67b01;
+}
+#itemDescription div{
+    background-color: #c67b01;
+}
+.sectionHead {
+    background-repeat: no-repeat;
+    background-position: 0;
+    height: 50px;
+    margin-left: 20px;
+}
+.sectionHead h2 {
+    color: #fff;
+    font-size: medium;
+    margin: 0 0 0 20px;
+    padding-top: 7px;
+}
+.sectionHead div {
+    background-repeat: no-repeat;
+    background-position: top right;
+    margin-left: 15px;
+    position: relative;
+    top: 14px;
+    width: 830px;
+    height: 33px;
+}
+
+#titleField{
+    background-color: #f9f9f9;
+    border: solid 1px #ddd;
+    margin: 0 35px 15px 35px;
+    padding: 15px;
+    display: block;
+}
+#picBox {
+	width: 830px;
+	margin-left: 40px;
+}
+
+.picFrame {
+    background: url(http://pics.ebaystatic.com/aw/pics/easylister/picwell.gif) no-repeat left top;
+    float: left;
+    text-align: center;
+    width: 124px;
+}
+.picwell {
+    background-color: #ccc;
+    margin: 10px 0 0 10px;
+    width: 96px;
+    height: 96px;
+}
+#pictures {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+.camIcon {
+    margin: 12px 0 0 3px;
+}
+.btnPicture{
+	margin-top: 50px;
+	margin-left: -10px;
+}
+.boxTag {
+    background-color: #f9f9f9;
+    border: solid 1px #ddd;
+    display: block;
+    margin-left: 35px;
+    margin-bottom: 15px;
+    padding: 0 15px 15px;
+    width: 830px;
+}
+#decBox label {
+    margin-top: 10px;
+}
+
