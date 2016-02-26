@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>DBay Account sss</title>
+        <title>DBay Account</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="css/account.css"/>
          <script type="text/javascript" src="js/jquery-1.12.0.js"></script>
-         <script src="https://getaddress.io/js/jquery.getAddress-2.0.1.min.js"></script>
         <script src="js/bootstrap/bootstrap.js"></script>
-        
+        <script type="text/javascript" src="js/crafty_clicks_js_class_v4_9_2/crafty_postcode.class.js"></script>
        <script type="text/javascript" src="js/main.js"></script> 
 
 
@@ -48,29 +47,43 @@
                         <label>Phone *</label>
                         <input type="text" maxlength="10"/>
                     </p>
-                    <!-- Postcode field -->
-                    <div id="postcode_lookup"></div>  
                     <p>
-                     <label>First Address *</label>
-                    <input id="line1" type="text">
+                     <label>Postcode *</label>
+                    <input type="text" name="postcode" id="postcode"/>
+                    <button type="button" id="btnFindPostCode">Find Address</button>
+                    <span id="spnPostcode_result_display" style="display:none;">
+                        <span id="spnAJAXWait">Please Wait...</span>
+                       <select id="cmbPostCode" style="display:none;">
+                       </select>
+                    </span><br/>
                     </p>
                     <p>
-                        <label>Second Address Line</label>
-                        <input id="line2" type="text">   
-                    </p>                                    
-                    <p>
-                        <label>Town</label>
-                        <input id="town" type="text">
+                        <label>Address Line 1 *</label>
+                        <input type="text" name="address1" id="address1" class="long"/>
                     </p>
                     <p>
-                        <label>County</label>
-                        <input id="county" type="text">
+                        <label class="optional">Address Line 2</label>
+                        <input type="text" name="address2" id="address2" class="long"/>
                     </p>
                     <p>
-                        <label>Postcode</label>
-                        <input id="postcode" type="text">
+                        <label>City *</label>
+                        <input type="text" name="town" id="town" class="long"/>
                     </p>
-                    
+                    <p>
+                        <label>Country *</label>
+                        <select>
+                            <option>
+                            </option>
+                            <option value="1">United States
+                            </option>
+                        </select>
+                    </p>
+                    <p>
+                        <label class="optional">Website
+                        </label>
+                        <input class="long" type="text" value="http://"/>
+
+                    </p>
                 </fieldset>
                 <fieldset class="row3">
                     <legend>Further Information

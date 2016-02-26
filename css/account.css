@@ -44,8 +44,8 @@ h4 {
 }
 form.register{
     width:800px;
-    margin: 20px auto 30px auto;
-    height:600px;
+    margin: 20px auto 0px auto;
+    height:530px;
     background-color:#fff;
     padding:5px;
     -moz-border-radius:20px;
@@ -77,7 +77,7 @@ form.register fieldset.row2
 {
     border-top:1px solid #F1F1F1;
     border-right:1px solid #F1F1F1;
-    height:300px;
+    height:220px;
     padding:5px;
     float:left;
 }
@@ -97,7 +97,6 @@ form.register fieldset.row4
     float:left;
     clear:both;
     width:500px;
-    margin-top: -20px;
 }
 form.register .infobox{
     float:right;
@@ -105,14 +104,14 @@ form.register .infobox{
     border: 1px solid #F1F1F1;
     padding:5px;
     width:380px;
-    height:120px;
+    height:98px;
     font-size:9px;
     background: #FDFEFA url(../img/bg_infobox.gif) repeat-x top left;
 }
 form.register legend
 {
     color: #abda0f;
-    /*padding:2px;*/
+    padding:2px;
     margin-left: 14px;
     font-weight:bold;
     font-size: 14px;
