@@ -4,16 +4,22 @@
         <title>DBay Account</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
+
         <link rel="stylesheet" type="text/css" href="css/account.css"/>
-         <script type="text/javascript" src="js/jquery-1.12.0.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/header.css">
+
+        <script type="text/javascript" src="js/jquery-1.12.0.js"></script>
         <script src="js/bootstrap/bootstrap.js"></script>
         <script type="text/javascript" src="js/crafty_clicks_js_class_v4_9_2/crafty_postcode.class.js"></script>
-       <script type="text/javascript" src="js/main.js"></script> 
+        <script type="text/javascript" src="js/main.js"></script> 
 
 
 
     </head>
     <body> 
+        <?php
+            include('header.php');
+        ?>
         <div class="container">
             <form action="" class="register" name="address">
                 <h1>Registration</h1>

@@ -52,19 +52,19 @@
 }
 
 #box {
-	left: 50%;
-	margin-left:  -450px;
-	position: relative;
-	width: 900px;
+    left: 50%;
+    margin-left:  -450px;
+    position: relative;
+    width: 900px;
 }
 #header {
-	background: url(http://pics.ebaystatic.com/aw/pics/easylister/header_bg.gif) repeat-x bottom;
-	background-color: #ffd739;
-	border-color: #ffb50c;
-	border-style: solid;
-	border-width: 1px 1px 0 1px;
-	margin-top: 10px;
-	height: 50px;
+    background: url(http://pics.ebaystatic.com/aw/pics/easylister/header_bg.gif) repeat-x bottom;
+    background-color: #ffd739;
+    border-color: #ffb50c;
+    border-style: solid;
+    border-width: 1px 1px 0 1px;
+    margin-top: 10px;
+    height: 50px;
 }
 #headerTxt h1 {
     font-size: medium;
@@ -111,8 +111,8 @@
     display: block;
 }
 #picBox {
-	width: 830px;
-	margin-left: 40px;
+    width: 830px;
+    margin-left: 40px;
 }
 
 .picFrame {
@@ -135,8 +135,8 @@
     margin: 12px 0 0 3px;
 }
 .btnPicture{
-	margin-top: 50px;
-	margin-left: -10px;
+    margin-top: 50px;
+    margin-left: -10px;
 }
 .boxTag {
     background-color: #f9f9f9;
@@ -149,14 +149,5 @@
 }
 #decBox label {
     margin-top: 10px;
-}
-
-#mainDesSection {
-    border: solid 1px rgb(255, 255, 255);
-    margin-top: 10px;
-    padding: 0;
-}
-.dropDown {
-    padding-top: 5px;
 }
 

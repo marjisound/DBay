@@ -9,7 +9,7 @@ body, html {
     font-family: Verdana,Arial, Helvetica, sans-serif;
     height: 100%;
     background-color: #f0f0f0;
-    margin:10px;
+    /*margin:10px;*/
 }
 body {
     font-size: 70%;
@@ -63,7 +63,7 @@ form.register fieldset.row1
     width:770px;
     padding:5px;
     float:left;
-    border-top:1px solid #F5F5F5;
+   /* border-top:1px solid #F5F5F5;*/
     margin-bottom:15px;
 }
 form.register fieldset.row1 label{
@@ -75,15 +75,15 @@ form.register fieldset.row1 label{
 }
 form.register fieldset.row2
 {
-    border-top:1px solid #F1F1F1;
+    /*border-top:1px solid #F1F1F1;
     border-right:1px solid #F1F1F1;
-    height:220px;
+    height:220px;*/
     padding:5px;
     float:left;
 }
 form.register fieldset.row3
 {
-    border-top:1px solid #F1F1F1;
+    /*border-top:1px solid #F1F1F1;*/
     padding:5px;
     float:left;
     margin-bottom:15px;
@@ -91,7 +91,7 @@ form.register fieldset.row3
 }
 form.register fieldset.row4
 {
-    border-top:1px solid #F1F1F1;
+   /* border-top:1px solid #F1F1F1;*/
     border-right:1px solid #F1F1F1;
     padding:5px;
     float:left;
