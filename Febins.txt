@@ -1,0 +1,3 @@
+The files index.php, account.php were modified by me.
+In the includes folder there are header.php, functions.php, sessions.php, connections.php 
+make sure you include these in the files that needs them.
