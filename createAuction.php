@@ -1,66 +1,77 @@
 <?php
- if (isset($_POST['btnSubmit'])) {
-    if($_POST['condition']===''){
-        $_POST['condition']=null;
-    }
-    if($_POST['category']===''){
-        $_POST['category']=null;
-    }
+    session_start();
 
-    
-    if(!$_POST['itemname']) {
-        $error="<br /> Item title";
-    }
-    if(!$_POST['condition']) {
-        $error.="<br /> Item condition";
-    }
-    if(!$_POST['category']) {
-        $error.="<br /> Item category";
-    }
-    if(!$_POST['itemBrand']) {
-        $error.="<br /> Item brand";
-    }
-    if(!$_POST['itemdescription']) {
-        $error.="<br />description";
-    }
-    if (!filter_var($_POST['start_price'], FILTER_VALIDATE_FLOAT)) { 
-    $error.="<br /> Please enter a valid start price"; 
-    }
+    require_once('include/db_connect.php');
 
-    if (!filter_var($_POST['reservePrice'], FILTER_VALIDATE_FLOAT)) { 
-    $error.="<br /> Please enter a valid reserved price"; 
-    }
-    
-    if ($error) {
-        $result='<div class="alert-danger"><strong>You did not entered the following data: </strong>'.$error.'</div>';
-    } else { 
-        if($_POST["btnSubmit"]) {
-            $result='<div class="alert-success">Form submitted</div>';
+    //shows all the variable 
+    extract($_POST);
 
-            $link = mysqli_connect("localhost", "cl43-dbay", "s3bYge/Bq", "cl43-dbay");
+    if (isset($btnSubmit)) {
+        $error="";
 
-            if(mysqli_connect_error()) {
+        
+        if(empty($itemname)) {
+            $error.="<br /> Item title";
+        }
+        if($condition==='0'){
+            $error.="<br /> Item condition";
+        }
+        if($cmbCategory==='0'){
+            $error.="<br /> Item category";
+        }
+        if(empty($itemBrand)) {
+            $error.="<br /> Item brand";
+        }
+        if(empty($itemdescription)) {
+            $error.="<br />description";
+        }
+        //filter var is for validation
+        if (!filter_var($start_price, FILTER_VALIDATE_FLOAT)) { 
+        $error.="<br /> Please enter a valid start price"; 
+        }
 
-                die("Could not connect to database");
-            }
+        if (!filter_var($reservePrice, FILTER_VALIDATE_FLOAT)) { 
+        $error.="<br /> Please enter a valid reserved price"; 
+        }
+        
+        if (!empty($error)) {
+            $result='<div class="alert-danger"><strong>You did not entered the following data: </strong>'.$error.'</div>';
+        } else { 
+           
+            // $query = "INSERT INTO `item` ("
+            
 
-            $itemname = $_POST[itemname];
-            $itemdescription = $_POST[itemdescription];
-            $condition = $_POST[condition]; 
-            $start_price = $_POST[start_price];
-            $query = "INSERT INTO `item` ("
-            $query = "INSERT INTO `auction` (`start_price`) VALUES('$start_price')";
-            $query = "INSERT INTO `item` (`itemname`, `itemdescription`) VALUES('$itemname', '$itemdescription')";
 
-            mysqli_query($link, $query);
+            $query = "INSERT INTO `item` (`sellerid`, `itemname`, `itemdescription`, `itemBrand`, `itemCondition`) VALUES(?, ?, ?, ?, ?)";
+           
+            $stmt = mysqli_prepare($link, $query);
+            mysqli_stmt_bind_param($stmt,'isssi' , $_SESSION['userid'], $itemname, $itemdescription, $itemBrand, $condition);
+            $result_set = mysqli_stmt_execute($stmt);
 
-            $query = "SELECT * FROM auction";
+            if($result_set) {
+                $item_id = mysqli_insert_id($link);
+                echo "inyani id: ".$item_id;
+                $query = "INSERT INTO `item_category` (`item_id`, `category_id`) VALUES(?, ?)";
+                $stmt = mysqli_prepare($link, $query);
+                //mysqli_insert_id outputs the last id stored in this set of code
+                mysqli_stmt_bind_param($stmt,'ii' , $item_id, $cmbCategory);
+                $result_set = mysqli_stmt_execute($stmt);
+
+
+                //now() + interval ? day will calculate the exact time and date
+                $query = "INSERT INTO `auction` (`item_id`, `start_price`, `reserve_price`, `end_date`) VALUES(?, ?, ?, now() + interval ? day)";
+                $stmt = mysqli_prepare($link, $query);
+                //mysqli_insert_id outputs the last id stored in this set of code
+                mysqli_stmt_bind_param($stmt,'idds' , $item_id, $start_price, $reservePrice, $duration);
+                $result_set = mysqli_stmt_execute($stmt);
+
+                $result='<div class="alert-success">Form submitted</div>';
+            } 
+            mysqli_free_result($result_set);
 
         }
 
     }
-
- }
     
 ?>
 
@@ -148,21 +159,36 @@
                                     <br>
                                 </div>
                                 <select name="condition">
-                                    <option value="">-</option>
-                                    <option value="100">New</option>
-                                    <option value="200">Refurbished</option>
-                                    <option value="400">Used</option>
+                                    <option value="0">Please select one</option>
+                                    <option value="10">New</option>
+                                    <option value="20">Refurbished</option>
+                                    <option value="30">Used</option>
                                 </select>
                             </div>
 
                              <div>
-                                <label style="font-weight:bold" for="itemCategory">Item category *</label>
+                                <label style="font-weight:bold" for="cmbCategory">Item category *</label>
                                 <div>
                                     <br>
                                 </div>
-                                <select name="category">
-                                    <option value="">-</option>
-                                    <option value="100">Collectables &amp; antiques</option>
+                                <select name="cmbCategory" id="cmbCategory">
+                                    <option value="0">Please select one</option>
+                                    <?php
+                                      $query = "select * from category";
+
+                                      $result_set = mysqli_query($link, $query);
+                                      //find how many rows result has
+                                      //if(mysqli_num_rows($result) > 0){
+                                      //fetch returns false when it reaches after the last row
+                                        while($row = mysqli_fetch_assoc($result_set)){
+                                            echo '<option value="'.$row['category-id'].'">'.$row['category-name'].'</option>';
+                                        }
+                                      //}
+                                      //this empties the $result
+                                      mysqli_free_result($result_set);
+                                    ?>
+
+                                 <!--    <option value="100">Collectables &amp; antiques</option>
                                     <option value="200">Home &amp; garden </option>
                                     <option value="300">Sporting goods</option>
                                     <option value="400">Electronics</option>
@@ -170,7 +196,7 @@
                                     <option value="600">Toys &amp; games</option>
                                     <option value="700">Fashion</option>
                                     <option value="800">Motors</option>
-                                    <option value="900">Other</option>
+                                    <option value="900">Other</option> -->
                                 </select>
                             </div>
                             <div id="mainDesSection" class="fullWidth" tabindex="-1">
