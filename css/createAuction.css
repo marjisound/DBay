@@ -159,4 +159,19 @@
 .dropDown {
     padding-top: 5px;
 }
+#priceSec {
+    margin-left: 50px;
+    margin-top: 10px;
+}
+.btnAuction {
+    float: right;
+    margin-right: 60px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#desBox label {
+    margin-top: 20px;
+    margin-bottom: -10px;
+}
+
 

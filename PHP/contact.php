@@ -19,7 +19,7 @@
 				}
 			}
 		?>
-
+		<p>Hello everybody, today is: <?php echo date('l'); ?>.</p>
 		<form method="post">
 			<label for="name">Name</label>
 			<input name="name" type="text" />

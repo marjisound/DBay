@@ -1,24 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>DBay Account</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
-
-        <link rel="stylesheet" type="text/css" href="css/account.css"/>
-        <link rel="stylesheet" type="text/css" href="css/header.css">
-
-        <script type="text/javascript" src="js/jquery-1.12.0.js"></script>
-        <script src="js/bootstrap/bootstrap.js"></script>
-        <script type="text/javascript" src="js/crafty_clicks_js_class_v4_9_2/crafty_postcode.class.js"></script>
-        <script type="text/javascript" src="js/main.js"></script> 
-
-
-
+    <?php 
+        $pageTitle = 'Auction Creation';
+        include('include/head.php');
+    ?>
+    <link rel="stylesheet" type="text/css" href="css/account.css"/>
+    <link rel="stylesheet" type="text/css" href="css/header.css">
     </head>
     <body> 
         <?php
-            include('header.php');
+            include('include/header.php');
         ?>
         <div class="container">
             <form action="" class="register" name="address">
@@ -34,7 +26,7 @@
                     <p>
                         <label>Password*</label>
                         <input type="text"/>
-                        <label>Repeat Password*</label>
+                        <label>Repeat Password *</label>
                         <input type="text"/>
                         <label class="obinfo">* obligatory fields</label>
                     </p>
