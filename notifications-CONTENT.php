@@ -32,7 +32,7 @@ $stmt -> bind_result($auctionID, $itemName, $sellerID, $startPrice,
 echo "<h2>Buyer notifications</h2>";
 
 if (!($stmt -> fetch())){ // No notifications to show
-    echo "You aren't watching any auctions.";
+    echo "<p>You aren't watching any auctions.</p>";
 } else { // Loop over watched auctions, determine notification type & display
     do{
         $watching    = $userHiBid == 0.00;
@@ -98,7 +98,7 @@ $stmt -> bind_result($auctionID, $itemName, $startPrice, $reservePrice,
 echo "<hl><h2>Seller notifications</h2>";
 
 if (!($stmt -> fetch())){ // No notifications to show
-    echo "You aren't selling anything.";
+    echo "<p>You aren't selling anything.</p>";
 } else { // Loop over auctions, determine notification type & display
     do{
         $auctionOver = $endDate < date("Y-m-d H:i:s");
