@@ -1,7 +1,7 @@
 <?php
 
 include "connect.php";
-$auctionID = $_GET["a"];
+// $auction ID set in auction.php with: $auctionID = $_GET["a"];
 $userID = $_SESSION["userID"];
 if (!isset($auction_id)){
     header("Location:noauction.php");
@@ -201,9 +201,8 @@ echo "<h2>Bid history</h2>";
 if ($anyBids){
     echo "<table class=\"table\">
               <thead><tr><th>Date</th><th>Amount</th></tr></thead>";
-              // special formatting for top row
-              $rowType = $winning ? "success" : ($hasbid ? ($auctionOver ? "danger" : "warning") : "info");
-    echo "    <tr class=\"$rowType\"><td>$bidDate</td><td>&pound;$bidAmount</td></tr>";
+              // special formatting for top bid
+    echo "    <tr class=\"$alertType\"><td>$bidDate</td><td>&pound;$bidAmount</td></tr>";
     while ($bidStmt -> fetch()){
         $rowType = ($buyerID == $userID) ? "info" : "default";
         echo "<tr class=\"$rowType\"><td>$bidDate</td><td>&pound;$bidAmount</td></tr>";
