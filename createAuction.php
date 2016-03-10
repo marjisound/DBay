@@ -40,7 +40,13 @@
            
             // $query = "INSERT INTO `item` ("
             
+            $target_dir = "uploads/";
+            $path_parts = pathinfo($_FILES["flImage1"]["name"]);
+            $extension = $path_parts['extension'];
+            $filename = 'image_' . date('Y-m-d-H-i-s') . '_' . uniqid() . '.'.$extension;
+            $target_file = $target_dir.$filename;
 
+            move_uploaded_file($_FILES["flImage1"]["tmp_name"], $target_file);
 
             $query = "INSERT INTO `item` (`sellerid`, `itemname`, `itemdescription`, `itemBrand`, `itemCondition`) VALUES(?, ?, ?, ?, ?)";
            
@@ -50,6 +56,13 @@
 
             if($result_set) {
                 $item_id = mysqli_insert_id($link);
+
+                $query = "INSERT INTO `image` (`item_id`, `file_name`, `is_cover_image`) VALUES(?, ?, 1)";
+                $stmt = mysqli_prepare($link, $query);
+                //mysqli_insert_id outputs the last id stored in this set of code
+                mysqli_stmt_bind_param($stmt,'is' , $item_id, $filename);
+                $result_set = mysqli_stmt_execute($stmt);
+
                 echo "inyani id: ".$item_id;
                 $query = "INSERT INTO `item_category` (`item_id`, `category_id`) VALUES(?, ?)";
                 $stmt = mysqli_prepare($link, $query);
@@ -59,7 +72,7 @@
 
 
                 //now() + interval ? day will calculate the exact time and date
-                $query = "INSERT INTO `auction` (`item_id`, `start_price`, `reserve_price`, `end_date`) VALUES(?, ?, ?, now() + interval ? day)";
+                $query = "INSERT INTO `auction` (`item_id`, `start_price`, `reserve_price`, `end_date`, `start_date`) VALUES(?, ?, ?, now() + interval ? day, now())";
                 $stmt = mysqli_prepare($link, $query);
                 //mysqli_insert_id outputs the last id stored in this set of code
                 mysqli_stmt_bind_param($stmt,'idds' , $item_id, $start_price, $reservePrice, $duration);
@@ -67,10 +80,18 @@
 
                 $result='<div class="alert-success">Form submitted</div>';
             } 
-            mysqli_free_result($result_set);
+            //mysqli_free_result($result_set);
 
         }
 
+    }
+    else{
+        $itemBrand = '';
+        $itemname = '';
+        $itemdescription = '';
+        $reservePrice = '';
+        $start_price = '';
+        $result = '';
     }
     
 ?>
@@ -89,7 +110,7 @@
             include ('include/header.php');
         ?>
         <div id="box">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 <div id="header">
                     <div id="headerTxt">
                         <h1>Create your listing</h1>
@@ -109,7 +130,7 @@
                                 <label style="font-weight:bold" for="itemname">Item title *</label>
                             </div> -->
                             <div>
-                                <input id="title" type="text" maxlength="80" size="70" name="itemname" value="<?php echo $_POST['itemname']; ?>">
+                                <input id="title" type="text" maxlength="80" size="70" name="itemname" value="<?php echo $itemname; ?>">
                                 </input>
                             </div>
                         </div>
@@ -131,10 +152,11 @@
                                        
                                     </div>
                                      <div class="btnPicture">
-                                        <input id="btnAdd1" type="button" value="Add a photo" name="btnAdd1"></input>
+                                        <input type="file" name="flImage1" />
+                                        <!--input id="btnAdd1" type="button" value="Add a photo" name="btnAdd1"></input-->
                                     </div>
                                 </div>
-                                <div id="picFrame2" class="picFrame">
+                                <!--div id="picFrame2" class="picFrame">
                                     <div class="picwell" style="background-color:#fecb00">
                                         <img class="camIcon" src="http://pics.ebaystatic.com/aw/pics/easylister/camera.gif">
                                        
@@ -142,7 +164,7 @@
                                      <div class="btnPicture">
                                         <input id="btnAdd1" type="button" value="Add a photo" name="btnAdd1"></input>
                                     </div>
-                                </div>
+                                </div-->
                             </div>
                          </div>
                     </section>
@@ -204,14 +226,14 @@
                                     <label style="font-weight:bold" for="itemBrand">Brand</label>
                                 </div>
                                 <div class="dropDown" role="dropdown">
-                                    <input id="type-0" type="text" size="49" maxlength="50" autocomplete="off" name="itemBrand" value="<?php echo $_POST['itemBrand']; ?>"></input>
+                                    <input id="type-0" type="text" size="49" maxlength="50" autocomplete="off" name="itemBrand" value="<?php echo $itemBrand; ?>"></input>
                                     <a id="downArrow" href=""></a>
                                 </div>
                                  <div id="desType">
                                     <label style="font-weight:bold" for="itemdescription">Item description *</label>
                                 </div>
                                 <div class="dropDown" role="dropdown">
-                                    <textarea rows="4" cols="50" name="itemdescription"><?php echo $_POST['itemdescription']; ?></textarea>
+                                    <textarea rows="4" cols="50" name="itemdescription"><?php echo $itemdescription; ?></textarea>
                                 </div>
 
                             </div>
@@ -230,7 +252,7 @@
                             <div>
                                 <label for="start_price">Start auction bid at: </label>
                                 £
-                                <input id="start_price" type="text" maxlength="6" value="0.99" name="start_price" value="<?php echo $_POST['start_price']; ?>"> 
+                                <input id="start_price" type="text" maxlength="6" value="0.99" name="start_price" value="<?php echo $start_price; ?>"> 
                                 <label for="duration">lasting for</label>
                                 <select id="duration" name="duration">
                                     <option value="1">1 day</option>
@@ -248,7 +270,7 @@
                             <div>
                                  <label for="reservePrice">Set your reserved price at: </label>
                                 £
-                                <input id="reservePrice" type="text" maxlength="6" value="0.99" name="reservePrice" value="<?php echo $_POST['reservePrice']; ?>"> 
+                                <input id="reservePrice" type="text" maxlength="6" value="0.99" name="reservePrice" value="<?php echo $reservePrice; ?>"> 
                             </div>
                         </fieldset>
                     </section>

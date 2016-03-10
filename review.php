@@ -10,9 +10,9 @@
          if(empty($score)) {
             $error="Please rate and then click submit.";
         } else { 
-             
+
             $query = "UPDATE `auction`";
-            if($role_type == 1) {
+            if($role_type == '1') {
                 $query .= " set `seller_rate` = ?, `seller_comment` = ?, seller_review_date = now()";
             }
             else {
@@ -50,7 +50,7 @@
         ?>
         <div id="box">
             <div class="container">
-                <form action="/html/tags/html_form_tag_action.cfm" method="post">
+                <form method="post">
                     <input type="hidden" name="auction_id" value="<?php echo $_GET['auction_id'];?>" />
                     <input type="hidden" name="role_type" value="<?php echo $_GET['type'];?>" />
                     <div class="row">
