@@ -49,4 +49,10 @@ $(document).ready(function(){
     $("#town").val(arrAddress[5]);
 
   });
+
+  $('.rate-star').raty({
+    path: 'css/raty/images',
+    starOff: 'star-off-big.png',
+    starOn: 'star-on-big.png'
+  });
 });
