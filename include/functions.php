@@ -126,7 +126,7 @@ function user_reg()
 	global $connection;
 	$Email = mysqli_prep(trim($_POST['Email']));    
 	$Password = mysqli_prep(trim($_POST['Password']));
-	$HPassword = hash("sha256",$Password);
+	$HPassword = password_hash($Password,PASSWORD_DEFAULT);
     $REmail = mysqli_prep(trim($_POST['REmail']));
     $RPassword = mysqli_prep(trim($_POST['RPassword']));
     $First_Name = mysqli_prep(trim($_POST['FName']));
