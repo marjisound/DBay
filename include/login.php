@@ -1,6 +1,6 @@
-<?php include 'C:/wamp/www/Db_project/includes/sessions.php' ?>
-<?php include 'C:/wamp/www/Db_project/includes/connections.php' ?>
-<?php require_once 'C:/wamp/www/Db_project/includes/functions.php' ?>
+<?php include 'include/sessions.php' ?>
+<?php include 'include/connections.php' ?>
+<?php require_once'include/functions.php' ?>
 <?php
 //Login.php 
 //Processing user login
@@ -17,7 +17,7 @@
 			global $errors;
 			$errors['username'] = "user not found or incorrect user email";
 			$_SESSION['login_errors'] = $errors;
-		    redirect_to('../public/index.php');
+		    redirect_to('index.php');
 		else:
 			$row = $result->fetch_assoc();
 			$prev_password = $row['user_password'];
@@ -28,11 +28,11 @@
 				$user_id = get_id($user_email);
 				$id_row = $user_id->fetch_assoc();
 				$_SESSION['user_id'] = $id_row['user_id'];
-				redirect_to('../public/notificationss.php');
+				redirect_to('notificationss.php');
 			else:
 				$errors['password'] = "Password does not match";
 				$_SESSION['login_errors'] = $errors;
-				redirect_to('../public/index.php');
+				redirect_to('index.php');
 			endif;
 		endif;
 	endif;
