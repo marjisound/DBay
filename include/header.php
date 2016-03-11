@@ -66,7 +66,7 @@ require_once('include/functions.php');
                         <li>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <form class="form" role="form" method="post" action="../include/login.php" accept-charset="UTF-8" id="login-nav">
+                                    <form class="form" role="form" method="post" action="login.php" accept-charset="UTF-8" id="login-nav">
                                         <div class="form-group">';
                                                            
                     // Store any log in errors in a sesssion and display these to the user, check out the file login.php and functions.php

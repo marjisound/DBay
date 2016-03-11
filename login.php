@@ -7,10 +7,10 @@
 
 	if(isset($_POST['Login'])):
 		$user_email = trim($_POST['user_email']);
-		$password 	= trim($_POST['password']);
+		//$password 	= mysqli_prep(trim($_POST['password']));
+		echo $password."<br/>";
 		//escape sql
 		$user_email = mysqli_prep($user_email);
-		$password = mysqli_prep($password);
 		// Now check database to see if user exists
 		$result = find_user($user_email);
 		if($result->num_rows === 0):
@@ -21,7 +21,10 @@
 		else:
 			$row = $result->fetch_assoc();
 			$prev_password = $row['user_password'];
-			$curr_password = hash("sha256",$password);
+			echo $prev_password."<br/>";
+			echo $password."<br/>";
+			$curr_password = hash("sha256",$_POST['password']);
+			echo $curr_password;
 			if($prev_password === $curr_password):
 			//Once authenticated, get their user_id and store this in a session,redirect to 
 			//notifications page.
@@ -32,7 +35,7 @@
 			else:
 				$errors['password'] = "Password does not match";
 				$_SESSION['login_errors'] = $errors;
-				redirect_to('index.php');
+				//redirect_to('index.php');
 			endif;
 		endif;
 	endif;

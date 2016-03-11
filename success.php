@@ -1,4 +1,4 @@
-<?php include 'C:/wamp/www/Db_project/includes/sessions.php' ?>
+<?php include 'include/sessions.php' ?>
 
 
 <!DOCTYPE html>
