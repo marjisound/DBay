@@ -11,9 +11,7 @@
         validate_min_length($fields_with_min_length);
     endif;
 ?>
-
-<?php
-    global $errors;
+<?php global $errors;
     //If after validation there are no errors then enter in to database
    if(!empty($errors)):
     $_SESSION['errors'] = $errors;
@@ -21,7 +19,6 @@
     endif;
     if(isset($_POST['submit']) && empty($errors)):
         $result = user_reg();
-        echo isset($result);
         confirm_query($result);
         $message = "You have registered! ";
         $_SESSION['message'] = $message;
