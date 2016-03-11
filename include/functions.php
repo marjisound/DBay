@@ -139,7 +139,7 @@ function user_reg()
     else:
     	$is_seller = 0;
     endif;
-	$query ="INSERT INTO users (user_name,user_password,tel,Postcode,is_seller,is_buyer) ";
+	$query ="INSERT INTO users (user_email,user_password,tel,Postcode,is_seller,is_buyer) ";
     $query .="VALUES ('$Email','$HPassword','$Phone','$Postcode','$is_seller','1')";  
     echo $query;
     $result = mysqli_query($connection,$query);
@@ -152,7 +152,7 @@ function find_user($user_email)
 	global $connection;
 	$query = " SELECT * ";
 	$query .= "FROM users ";
-	$query .= "WHERE user_name = '$user_email'";
+	$query .= "WHERE user_email = '$user_email'";
 	$result = mysqli_query($connection,$query);
 	return $result;
 }
@@ -161,7 +161,7 @@ function get_id($user_email)
 	global $connection;
 	$query = " SELECT user_id ";
 	$query .= "FROM users ";
-	$query .= "WHERE user_name = '$user_email'";
+	$query .= "WHERE user_email = '$user_email'";
 	$result = mysqli_query($connection,$query);
 	confirm_query($result);
 	return $result;
@@ -169,12 +169,12 @@ function get_id($user_email)
 function get_email($id)
 {
 	global $connection;
-	$query = "SELECT user_name ";
+	$query = "SELECT user_email ";
 	$query .= "FROM users ";
 	$query .= "WHERE user_id = '$id' ";
 	$result = mysqli_query($connection,$query);
 	$row = $result->fetch_assoc();
-	$name = $row['user_name'];
+	$name = $row['user_email'];
 	return $name;
 }
 // searching
