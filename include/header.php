@@ -21,20 +21,20 @@ require_once('include/functions.php');
                 <?php
                 if(logged_in()):
                     echo
-                        '<li class="active"><a href="../public/notifications.php">Notifications</a></li>';
+                        '<li class="active"><a href="notifications.php">Notifications</a></li>';
                 endif;
                 ?>
-                <li><a href="../public/index.php">Home Page</a></li>
+                <li><a href="index.php">Home Page</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="../public/notifications.php">Go to notifications</a></li>
+                        <li><a href="notifications.php">Go to notifications</a></li>
                         <li><a href="#">Search By Category</a>
                             <ul>
-                                <li><a href="../public/search.php">Cat 1 </a>
-                                <li><a href="../public/search.php">Cat 1 </a>
-                                <li><a href="../public/search.php">Cat 1 </a>
-                                <li><a href="../public/search.php">Cat 1 </a>
+                                <li><a href="search.php">Cat 1 </a>
+                                <li><a href="search.php">Cat 1 </a>
+                                <li><a href="search.php">Cat 1 </a>
+                                <li><a href="search.php">Cat 1 </a>
                             </ul>
                         </li>
                         <li class="divider"></li>
@@ -66,7 +66,7 @@ require_once('include/functions.php');
                         <li>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <form class="form" role="form" method="post" action="../includes/login.php" accept-charset="UTF-8" id="login-nav">
+                                    <form class="form" role="form" method="post" action="../include/login.php" accept-charset="UTF-8" id="login-nav">
                                         <div class="form-group">';
                                                            
                     // Store any log in errors in a sesssion and display these to the user, check out the file login.php and functions.php
@@ -92,7 +92,7 @@ require_once('include/functions.php');
                                     </form>
                                 </div>
                                 <div class="bottom text-center">
-                                    New here ? <a href="../public/account.php"><b>Join Us</b></a>
+                                    New here ? <a href="account.php"><b>Join Us</b></a>
                                 </div>
                             </div>
                         </li>';

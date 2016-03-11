@@ -1,6 +1,7 @@
-<?php include 'C:/wamp/www/Db_project/includes/sessions.php' ?>
-<?php include 'C:/wamp/www/Db_project/includes/connections.php' ?>
-<?php require_once'C:/wamp/www/Db_project/includes/functions.php' ?>
+<?php include 'include/sessions.php' ?>
+<?php include 'include/connections.php' ?>
+<?php require_once'include/functions.php' ?>
+
 <?php 
     if(isset($_POST['submit'])):
         //Validation functions
@@ -39,15 +40,12 @@ endif;
         <title>DBay Account sss</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="../public/css/account.css"/>
-         <script type="text/javascript" src="js/jquery-1.12.0.js"></script>
-         <script src="https://getaddress.io/js/jquery.getAddress-2.0.1.min.js"></script>
-        <script src="js/bootstrap/bootstrap.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/account.css"/>
         
-       <script type="text/javascript" src="js/main.js"></script> 
-
-
-
+        <script type="text/javascript" src="js/jquery-1.12.0.js"></script>
+        <script src="https://getaddress.io/js/jquery.getAddress-2.0.1.min.js"></script>
+        <script src="js/bootstrap/bootstrap.js"></script>
+        <script type="text/javascript" src="js/main.js"></script> 
     </head>
     <body>
         <?php 

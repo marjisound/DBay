@@ -1,6 +1,6 @@
-<?php include 'C:/wamp/www/Db_project/includes/sessions.php' ?>
-<?php include 'C:/wamp/www/Db_project/includes/connections.php' ?>
-<?php require_once'C:/wamp/www/Db_project/includes/functions.php' ?>
+<?php include 'include/sessions.php' ?>
+<?php include 'include/connections.php' ?>
+<?php require_once'include/functions.php' ?>
 
 <!doctype html>
 <html>
@@ -18,7 +18,7 @@
 <div class = "container">
     <div>
         <?php
-        include ('C:/wamp/www/Db_project/includes/header/header.php');
+        include ('include/header.php');
         ?>
     </div>
   
