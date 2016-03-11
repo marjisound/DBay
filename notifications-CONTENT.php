@@ -1,8 +1,16 @@
 <?php
 
-include "connect.php";
-include "notificationClasses.php"
+session_start();
+
+
+
+//include "connect.php";
+include "include/db_connect.php";
+include "notificationClasses.php";
+//llater get it from login page
+$_SESSION["userID"] = 1;
 $userID = $_SESSION["userID"];
+// not used in current version tells page how many to load
 $numResults = 20;
 $getMoreBuy = 0;
 $getMoreSell = 0;
@@ -10,20 +18,21 @@ $getMoreSell = 0;
 echo "<h1>Notifications</h1><hl>";
 
 // Fetch data about joined/ watched auctions for buyer notifications
-$stmt = $connection -> prepare("SELECT `auction_id`, `item_name`, `seller_id`,
+$stmt = $connection->prepare("SELECT `a`.`auction_id`, `i`.`itemname`, `i`.`sellerid`,
                                        `start_price`, `reserve_price`,
-                                       `end_date`, `view_count`, `winner_id`,
+                                       `end_date`, `view_count`, `a`.`buyer_id`,
                                        MAX(b.price)
                                 FROM `auction`   a
-                                     JOIN `bid`  b ON a.auction_id == b.auction_id
-                                     JOIN `item` i ON a.item_id == i.item_id
+                                     JOIN `bid`  b ON a.auction_id = b.auction_id
+                                     JOIN `item` i ON a.item_id = i.itemid
                                 WHERE b.buyer_id = ?
                                 GROUP BY b.auction_id
                                 ORDER BY a.end_date
                                 LIMIT ?
-                                OFFSET = ?
+                                OFFSET ?
                                ");
-$stmt -> bind_param("iii", $userID, $numResults, $getMoreBuy*$numResults);
+$offset = $getMoreBuy*$numResults;
+$stmt -> bind_param("iii", $userID, $numResults, $offset);
 $stmt -> execute();
 $stmt -> bind_result($auctionID, $itemName, $sellerID, $startPrice,
                      $reservePrice, $endDate, $viewCount, $winnerID,
@@ -40,34 +49,40 @@ if (!($stmt -> fetch())){ // No notifications to show
         $winning     = $userID == $winnerID;
         if ($watching){
             if ($auctionOver){
-                new NotifyWatchEnd($auctionID, $itemName, $startPrice,
-                                          $reservePrice, $endDate, $viewCount)
-                -> show();
+               $x = new NotifyWatchEnd($auctionID, $itemName, $startPrice,
+                                          $reservePrice, $endDate, $viewCount);
+               $x->show();
             } else {
-                new NotifyWatchCont($auctionID, $itemName, $endDate,
-                                    $viewCount) -> show();
+               $x = new NotifyWatchCont($auctionID, $itemName, $endDate,
+                                    $viewCount);
+                                    $x -> show();
             }
         } else {
             if ($auctionOver){
                 if ($winning){
                     if ($userHiBid >= $reservePrice){
-                        new NotifyWon($auctionID, $itemName, $sellerID,
-                                      $userHiBid) -> show();
+                      $x =  new NotifyWon($auctionID, $itemName, $sellerID,
+                                      $userHiBid);
+                      $x -> show();
                     } else {
-                        new NotifyTooLow($auctionID, $itemName, $reservePrice,
-                                         $endDate, $userHiBid) -> show();
+                      $x =   new NotifyTooLow($auctionID, $itemName, $reservePrice,
+                                         $endDate, $userHiBid);
+                      $x -> show();
                     }
                 } else {
-                    new NotifyLost($auctionID, $itemName, $reservePrice,
-                                   $endDate, $userHiBid) -> show();
+                   $x =  new NotifyLost($auctionID, $itemName, $reservePrice,
+                                   $endDate, $userHiBid);
+                                   $x -> show();
                 }
             } else {
                 if ($winning){
-                    new NotifyWinning($auctionID, $itemName, $endDate,
-                                      $userHiBid) -> show();
+                   $x = new NotifyWinning($auctionID, $itemName, $endDate,
+                                      $userHiBid);
+                                      $x -> show();
                 } else {
-                    new NotifyOutbid($auctionID, $itemName, $endDate,
-                                     $userHiBid) -> show();
+                  $x =  new NotifyOutbid($auctionID, $itemName, $endDate,
+                                     $userHiBid);
+                                     $x -> show();
                 }
             }
         }
@@ -77,20 +92,21 @@ if (!($stmt -> fetch())){ // No notifications to show
 
 
 // Fetch data about auctions set up by this user
-$stmt = $connection -> prepare("SELECT `auction_id`, `item_name`,
+$stmt = $connection -> prepare("SELECT `a`.`auction_id`, `i`.`itemname`,
                                        `start_price`, `reserve_price`,
                                        `start_date`, `end_date`, `view_count`,
-                                       `winner_id`, MAX(b.price)
+                                       `a`.`buyer_id`, MAX(b.price)
                                 FROM `auction`   a
-                                     JOIN `bid`  b ON a.auction_id == b.auction_id
-                                     JOIN `item` i ON a.item_id == i.item_id
-                                WHERE a.seller_id = ?
+                                     JOIN `bid`  b ON a.auction_id = b.auction_id
+                                     JOIN `item` i ON a.item_id = i.itemid
+                                WHERE i.sellerid = ?
                                 GROUP BY b.auction_id
                                 ORDER BY a.end_date
                                 LIMIT ?
-                                OFFSET = ?
+                                OFFSET ?
                                ");
-$stmt -> bind_param("iii", $userID, $numResults, $getMoreSell*$numResults);
+$offset = $getMoreSell*$numResults;
+$stmt -> bind_param("iii", $userID, $numResults, $offset);
 $stmt -> execute();
 $stmt -> bind_result($auctionID, $itemName, $startPrice, $reservePrice,
                      $startDate, $endDate, $viewCount, $winnerID, $hiBid);
@@ -106,29 +122,33 @@ if (!($stmt -> fetch())){ // No notifications to show
         $gotReserve  = isset($hiBid) ? ($hiBid >= $reservePrice) : false;
         if ($auctionOver){
             if ($gotReserve){
-                new NotifySold($auctionID, $itemName, $winnerID, $hiBid)
-                -> show();
+               $x =  new NotifySold($auctionID, $itemName, $winnerID, $hiBid);
+
+               $x -> show();
             } else {
                 if ($gotBids){
-                    new NotifyTooHigh($auctionID, $itemName, $reservePrice,
-                                      $endDate, $hiBid) -> show();
+                   $x =  new NotifyTooHigh($auctionID, $itemName, $reservePrice,
+                                      $endDate, $hiBid);
+                                      $x -> show();
                 } else {
-                    new NotifyNoBidEver($auctionID, $itemName, $startPrice,
+                  $x =  new NotifyNoBidEver($auctionID, $itemName, $startPrice,
                                         $startDate, $endDate, $viewCount);
                 }
             }
         } else {
             if ($gotReserve){
-                new NotifySelling($auctionID, $itemName, $endDate, $hiBid)
-                -> show();
+               $x = new NotifySelling($auctionID, $itemName, $endDate, $hiBid);
+
+               $x -> show();
             } else {
                 if ($gotBids){
-                    new NotifyWaiting($auctionID, $itemName, $reservePrice,
-                                      $endDate, $hiBid) -> show();
+                  $x =  new NotifyWaiting($auctionID, $itemName, $reservePrice,
+                                      $endDate, $hiBid);
+                                      $x -> show();
                 } else {
-                    new NotifyNoBidYet($auctionID, $itemName, $startPrice,
-                                       $startDate, $endDate, $viewCount)
-                    -> show();
+                   $x = new NotifyNoBidYet($auctionID, $itemName, $startPrice,
+                                       $startDate, $endDate, $viewCount);
+                  $x  -> show();
                 }
             }
         }

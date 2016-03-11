@@ -29,10 +29,10 @@ class DBayPage{
         <link href=\"css/style.css\" rel=\"stylesheet\">
 
     </head>
-    <body>
+    <body>";
 
-        <div class=\"container-fluid\">";
-            include "header.php";
+           //<div class=\"container-fluid\">";
+            include "include/header.php";
             echo "<section class=\"row\">
                 <div class=\"col-md-12\">";
                     include $pageContent;

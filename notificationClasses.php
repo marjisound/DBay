@@ -25,7 +25,7 @@ class NotifyWatchEnd{
         global $connection;
         $stmt = $connection -> prepare("SELECT MAX(`price`)
                                         FROM `bid`
-                                        WHERE `auction_id` == ?");
+                                        WHERE `auction_id` = ?");
         $stmt -> bind_param("i",$auctionID);
         $stmt -> execute();
         $stmt -> bind_result($hiBid);
@@ -55,7 +55,7 @@ class NotifyWatchEnd{
 				echo "<p>The winning bid was &pound;$hiBid</p>";
 			}
 		}
-        echo "<p>The auction was viewed $viewCount times.</p></div>"
+        echo "<p>The auction was viewed $viewCount times.</p></div>";
     }
 }
 
@@ -78,7 +78,7 @@ class NotifyWatchCont{
         global $connection;
         $stmt = $connection -> prepare("SELECT MAX(`price`)
                                         FROM `bid`
-                                        WHERE `auction_id` == ?");
+                                        WHERE `auction_id` = ?");
         $stmt -> bind_param("i",$auctionID);
         $stmt -> execute();
         $stmt -> bind_result($hiBid);
@@ -97,7 +97,7 @@ class NotifyWatchCont{
 			$itemName</a> is &pound;$hiBid</p>";
         }
         echo "<p>The auction has been viewed $viewCount times so far.</p>
-		<p>The auction is due to end on $endDate.</p></div>"
+		<p>The auction is due to end on $endDate.</p></div>";
     }
 }
 
@@ -192,7 +192,7 @@ class NotifyLost{
 		if ($hiBid<$reservePrice){
 			echo "<p>The auction ended on $endDate without sale.
 			The highest bid was	&pound;$hiBid,
-			compared to the reserve price of &pound;$reservePrice</p>"
+			compared to the reserve price of &pound;$reservePrice</p>";
 		} else {
 			echo "<p>The auction ended on $endDate, with a winning bid of &pound;$hiBid</p>";
 		}
@@ -401,7 +401,7 @@ class NotifyWaiting{
 
 // NotifyNoBidYet: Shown to users with ongoing auctions
 //                for which there are as yet no bids
-class NotifyWaiting{
+class NotifyNoBidYet{
 	private $auctionID;
     private $itemName;
 	private $startPrice;
