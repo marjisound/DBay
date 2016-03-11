@@ -3,7 +3,7 @@
 	define("DBHOST","localhost");
 	define("DBUSER","db");
 	define("DBPASS","ucl");
-	define("DBNAME","auction_system");
+	define("DBNAME","auctionn_system");
 	$connection = mysqli_connect(DBHOST,DBUSER,DBPASS,DBNAME);
 	// Test if connect occuered.
 	if(mysqli_connect_errno()){

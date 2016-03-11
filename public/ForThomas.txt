@@ -1,0 +1,5 @@
+What is bind_param , this does not seem to work.
+
+I had changed notifications-CONTENT -> not-content, notifications->notificationss.php
+
+Cureently working with auction page.

@@ -93,7 +93,19 @@ function redirect_to($new_location)
 	header("Location: ". $new_location);
 	exit;
 }
-
+// check that user is logged in
+function logged_in(){
+	return isset($_SESSION['user_id']);
+}
+function confirm_login()
+{
+	if(!isset($_SESSION['user_id'])):
+		redirect_to('index.php');
+	endif;
+}
+function logout(){
+		$_SESSION['user_id'] = null;
+}
 //sql functions
 function confirm_query($results)
 {
@@ -114,17 +126,22 @@ function user_reg()
 	global $connection;
 	$Email = mysqli_prep(trim($_POST['Email']));    
 	$Password = mysqli_prep(trim($_POST['Password']));
-	$Password = hash("sha256",$Password);
+	$HPassword = hash("sha256",$Password);
     $REmail = mysqli_prep(trim($_POST['REmail']));
     $RPassword = mysqli_prep(trim($_POST['RPassword']));
-    $RPassword = hash("sha256",$Password);
     $First_Name = mysqli_prep(trim($_POST['FName']));
     $Last_Name = mysqli_prep(trim($_POST['LName']));
     $Phone = mysqli_prep(trim($_POST['Phone']));
     $First_Address = mysqli_prep(trim($_POST['FAdd']));
     $Postcode = mysqli_prep(trim($_POST['Postcode']));
-	$query ="INSERT INTO users (user_email,user_password,tel,Postcode,is_buyer) ";
-    $query .="VALUES ('$Email','$Password','$Phone','$Postcode','1')";  
+    if(isset($_POST['Seller'])):
+    	$is_seller = 1;
+    else:
+    	$is_seller = 0;
+    endif;
+	$query ="INSERT INTO users (user_name,user_password,tel,Postcode,is_seller,is_buyer) ";
+    $query .="VALUES ('$Email','$HPassword','$Phone','$Postcode','$is_seller','1')";  
+    echo $query;
     $result = mysqli_query($connection,$query);
     return $result;
 }
@@ -135,7 +152,7 @@ function find_user($user_email)
 	global $connection;
 	$query = " SELECT * ";
 	$query .= "FROM users ";
-	$query .= "WHERE user_email = '$user_email'";
+	$query .= "WHERE user_name = '$user_email'";
 	$result = mysqli_query($connection,$query);
 	return $result;
 }
@@ -144,9 +161,85 @@ function get_id($user_email)
 	global $connection;
 	$query = " SELECT user_id ";
 	$query .= "FROM users ";
-	$query .= "WHERE user_email = '$user_email'";
+	$query .= "WHERE user_name = '$user_email'";
 	$result = mysqli_query($connection,$query);
 	confirm_query($result);
 	return $result;
+}
+function get_email($id)
+{
+	global $connection;
+	$query = "SELECT user_name ";
+	$query .= "FROM users ";
+	$query .= "WHERE user_id = '$id' ";
+	$result = mysqli_query($connection,$query);
+	$row = $result->fetch_assoc();
+	$name = $row['user_name'];
+	return $name;
+}
+// searching
+
+function user_search($user_query,$limString,$resString)
+{
+	global $connection;
+	$user_query = mysqli_prep($user_query);
+	echo "you searched for: ".$user_query;
+	// Need only items that are currentyl auctioned.
+	$query = "SELECT  * ";
+	$query .= "FROM auction a ";
+	$query .= "JOIN item i ON ";
+	$query .= "i.item_id = a.item_id ";
+	$query .= "WHERE item_name LIKE ".'"%'.$user_query.'%" ';
+	$query .= "AND DATEDIFF(a.end_date,NOW()) > 0 ";
+	if(!empty($resString)):
+	$query .= "AND ".$resString;
+	endif;
+	if(!empty($limString)):
+	$query .= $limString;
+	endif;
+	echo $query;
+	$result = mysqli_query($connection,$query);
+	return $result;
+}
+function time_to_end($time)
+{
+	$datetime1 = date_create($time);
+	$datetime2 = date_create("now");
+	$interval = date_diff($datetime2,$datetime1);
+	//$interval=$interval->fetch_assoc();
+	if($interval->format('%y') >0):
+		$format_string=$interval->format('%y')." years left";
+	elseif($interval->format('%m')>0):
+		$format_string=$interval->format('%m')." months and ".$interval->format('%d')." days left";
+	elseif($interval->format('%d')>0):
+		$format_string=$interval->format('%d')." days and ".$interval->format('%h')." hours left";
+	elseif ($interval->format('%h')>0):
+		$format_string=$interval->format('%h')." hours and ".$interval->format('%i')." minutes left";
+	else:
+		$format_string=$interval->format('%i')." mins and ".$interval->format('%s')." seconds left";
+	endif;
+	return $format_string;
+}
+function user_query()
+{
+	
+		//return $result;
+}
+function freeresult($result)
+{
+	global $connection;
+	mysqli_free_result($result);
+}
+//Generic Helper
+function has_next($array) {
+    if (is_array($array)) {
+        if (next($array) === false) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 ?>

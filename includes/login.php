@@ -4,8 +4,9 @@
 <?php
 //Login.php 
 //Processing user login
+
 	if(isset($_POST['Login'])):
-		$user_email = trim($_POST['user-email']);
+		$user_email = trim($_POST['user_email']);
 		$password 	= trim($_POST['password']);
 		//escape sql
 		$user_email = mysqli_prep($user_email);
@@ -27,7 +28,7 @@
 				$user_id = get_id($user_email);
 				$id_row = $user_id->fetch_assoc();
 				$_SESSION['user_id'] = $id_row['user_id'];
-				redirect_to('../public/notifications.php');
+				redirect_to('../public/notificationss.php');
 			else:
 				$errors['password'] = "Password does not match";
 				$_SESSION['login_errors'] = $errors;

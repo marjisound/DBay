@@ -15,9 +15,9 @@ require_once('C:/wamp/www/Db_project/includes/functions.php');
         <div class="col-md-4">
             <form style="text-align:left" action = "../public/search.php" method = "post">
                  <h4 class="form-signin-heading">Enter the name of an item</h4>
-                <input type="text" class="form-control" name="Search" placeholder="Search" required="" autofocus="" />
+                <input type="text" class="form-control" name="user_query" placeholder="Search" required="" autofocus="" />
                 
-                 <button class="btn btn-lg btn-primary" name="" value="search" type="Submit"><span class="glyphicon glyphicon-search"></span>Search
+                 <button class="btn btn-lg btn-primary" name="search" value="search" type="Submit"><span class="glyphicon glyphicon-search"></span>Search
                 </button>     
             </form>
         </div>

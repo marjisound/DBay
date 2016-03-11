@@ -1,3 +1,7 @@
+<?php include 'C:/wamp/www/Db_project/includes/sessions.php' ?>
+<?php include 'C:/wamp/www/Db_project/includes/connections.php' ?>
+<?php require_once'C:/wamp/www/Db_project/includes/functions.php' ?>
+
 <!doctype html>
 <html>
 <head>
@@ -11,44 +15,13 @@
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 <body>
-    <!--Bootsnip code -->
-
 <div class = "container">
-    
-<div class="container" style="height:200px;padding:6px" >
-    <div class = "row" style="background-color:#00FFFF">
-        <div class ="col-md-4">
-            <h1>Welcome to DBay </h1> <br />
-            <p style="font-style:italic">You can search for products using the seach field <br/>
-             alternatively you may browse by category !</p>
-        </div>
- <!-- login_page.php deals with the action with validating user login -->
-        <div class="col-md-4">
-            <form style="text-align:left" action = "" method = "get">
-                 <h4 class="form-signin-heading">Enter the name of an item</h4>
-                <input type="text" class="form-control" name="Search" placeholder="Search" required="" autofocus="" />
-                
-                 <button class="btn btn-lg btn-primary "  name="Submit" value="Login" type="Submit"><span class="glyphicon glyphicon-search"></span>Search
-                </button>     
-            </form>
-        </div>
-        <div class="col-md-4">
-            <div class="wrapper" style ="width:300px">
-                <form action="" method="post" name="Login_Form" class="form-signin">       
-                <h4 class="form-signin-heading">Please Sign In</h4>
-              
-                <input type="text" class="form-control" name="Username" placeholder="Username" required="" autofocus="" />
-                <input type="password" class="form-control" name="Password" placeholder="Password" required=""/>            
-             
-                <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Login</button>            
-               </form>        
-               <a href=#>sign up</a> <br/>
-               <a href=#>forgot login details </a>
-            </div>
-            
-        </div>
+    <div>
+        <?php
+        include ('C:/wamp/www/Db_project/includes/header/header.php');
+        ?>
     </div>
-</div>
+  
     <div class="container" style="padding:0px" >
          <ul class="nav navbar-nav">
          <li class="dropdown" style="background-color:green">
@@ -75,13 +48,44 @@
     </div>
   
 
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    <li data-target="#myCarousel" data-slide-to="2"></li>
+    <li data-target="#myCarousel" data-slide-to="3"></li>
+  </ol>
 
-
-<div class = "container" style="padding:20px width:300px">
-    <p style="font-style:italic"> Here you have the most popular autions happing at the moment</p>
-    <div class ="jumbotron">
-        <h2> Hot Auctions </h2>
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+      <img src="" alt="">
     </div>
+
+    <div class="item">
+      <img src="" alt="">
+    </div>
+
+    <div class="item">
+      <img src="" alt="">
+    </div>
+
+    <div class="item">
+      <img src="" alt="">
+    </div>
+  </div>
+
+
+  <!-- Left and right controls -->
+  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
 </div>
 
 <!-- Footer section -->
