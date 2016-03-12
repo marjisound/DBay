@@ -1,10 +1,7 @@
-<?php
-
-    session_start();
-
-    require_once('include/db_connect.php');
-
-    extract($_POST);
+<?php include 'include/sessions.php' ?>
+<?php include 'include/connections.php' ?>
+<?php require_once'include/functions.php' ?>
+<?php extract($_POST);
 
     if (isset($btnSubmit)) {
          if(empty($score)) {

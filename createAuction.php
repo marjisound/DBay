@@ -1,9 +1,7 @@
-<?php
-    session_start();
-
-    require_once('include/db_connect.php');
-
-    //shows all the variable 
+<?php include 'include/sessions.php' ?>
+<?php include 'include/connections.php' ?>
+<?php require_once'include/functions.php' ?>
+<?php  //shows all the variable 
     extract($_POST);
 
     if (isset($btnSubmit)) {

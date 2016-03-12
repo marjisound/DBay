@@ -1,6 +1,6 @@
-<?php include 'C:/wamp/www/Db_project/includes/sessions.php' ?>
-<?php include 'C:/wamp/www/Db_project/includes/connections.php' ?>
-<?php require_once'C:/wamp/www/Db_project/includes/functions.php' ?>
+<?php include 'include/sessions.php' ?>
+<?php include 'include/connections.php' ?>
+<?php require_once'include/functions.php' ?>
 
 <!DOCTYPE html>
 <html>
@@ -15,7 +15,7 @@
 	<title>Search</title>
 </head>
 <body>
-	<?php include'../includes/header/header.php' ?>
+	<?php include'/include/header.php' ?>
 	<?php
 		if(isset($_GET['user_query'])):
 			$user_query = htmlspecialchars($_GET['user_query']);
@@ -101,9 +101,9 @@
     								</button>
     								
    									 <ul class="dropdown-menu">
-     									 <li><a href='../public/search.php?user_query=<?php echo $user_query;?>&res=r1&limit=<?php echo $curr_lim;?>'>0-30</a></li>
-     								 	<li><a href='../public/search.php?user_query=<?php echo $user_query;?>&res=r2&limit=<?php echo $curr_lim;?>'>30-100</a></li>
-     								 	<li><a href='../public/search.php?user_query=<?php echo $user_query;?>&res=r3&limit=<?php echo $curr_lim;?>'>100 &gt;</a></li>
+     									 <li><a href='search.php?user_query=<?php echo $user_query;?>&res=r1&limit=<?php echo $curr_lim;?>'>0-30</a></li>
+     								 	<li><a href='search.php?user_query=<?php echo $user_query;?>&res=r2&limit=<?php echo $curr_lim;?>'>30-100</a></li>
+     								 	<li><a href='search.php?user_query=<?php echo $user_query;?>&res=r3&limit=<?php echo $curr_lim;?>'>100 &gt;</a></li>
    								    </form>
   								</div>		
                             </li>
@@ -113,9 +113,9 @@
     								<span class="caret"></span>
     								</button>
    									 <ul class="dropdown-menu">
-    									  <li><a href='../public/search.php?user_query=<?php echo $user_query;?>&limit=5&res=<?php echo $curr_res;?>'>5 Items</a></li>
-     									 <li><a href='../public/search.php?user_query=<?php echo $user_query;?>&limit=10&res=<?php echo $curr_res;?>'>10 Items</a></li>
-     								 	<li><a href='../public/search.php?user_query=<?php echo $user_query;?>&limit=m&res=<?php echo $curr_res;?>'>More than 10</a></li>
+    									  <li><a href='search.php?user_query=<?php echo $user_query;?>&limit=5&res=<?php echo $curr_res;?>'>5 Items</a></li>
+     									 <li><a href='search.php?user_query=<?php echo $user_query;?>&limit=10&res=<?php echo $curr_res;?>'>10 Items</a></li>
+     								 	<li><a href='search.php?user_query=<?php echo $user_query;?>&limit=m&res=<?php echo $curr_res;?>'>More than 10</a></li>
    								 	</ul>
   								</div>		
                             </li>
@@ -146,7 +146,7 @@
 							<img src="http://www.aviatorcameragear.com/wp-content/uploads/2012/07/placeholder.jpg" class="img-rounded" style="width:150px">
 						</section>
 						<section class="col-md-8">
-							<h3 class=""><a href=../public/auction.php?a_id='.$a_id.'>'.$name.'</a></h3>
+							<h3 class=""><a href=auction.php?a_id='.$a_id.'>'.$name.'</a></h3>
 							<ul class="search-list">
 								<li class="">
 									<span class="bold"><b>Description</b> :'. $curr_price.'</span>

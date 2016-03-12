@@ -25,7 +25,7 @@ class DBayPage{
 
         <title>$pageTitle</title>
 
-        <link href=\"css/bootstrap.min.css\" rel=\"stylesheet\">
+        <link rel=\"stylesheet href=\"css\"bootstrap\"bootstrap.min.css\" >
         <link href=\"css/style.css\" rel=\"stylesheet\">
 
     </head>
