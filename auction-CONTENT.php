@@ -1,82 +1,97 @@
 <?php
 
-include "connect.php";
-// $auction ID set in auction.php with: $auctionID = $_GET["a"];
-$userID = $_SESSION["userID"];
-if (!isset($auction_id)){
+//include "connect.php";
+$auctionID = $_GET["a"];
+$userID = $_SESSION["user_id"];
+if (!isset($auctionID)){
     header("Location:noauction.php");
 }
 
 // Fetch auction details
-$stmt = $connection -> prepare("SELECT * FROM `auction` WHERE `auction_id` == ?");
-$stmt -> bind_param("i", $auctionID);
-$stmt -> execute();
-$stmt -> bind_result("iiddssiisissis", $auctionID, $itemID, $startPrice,
-                     $reservePrice, $startDate, $endDate, $viewCount,
-                     $winnerID, $buyerComment, $buyerRate, $buyerReviewDate,
-                     $sellerComment, $sellerRate, $sellerReviewDate);
-if (!($stmt -> fetch())){
-    header("Location:noconnect.php");
+$stmt = mysqli_stmt_init($connection);
+$stmt = mysqli_prepare($connection, "SELECT * FROM `auction` WHERE `auction_id` = ?");
+mysqli_stmt_bind_param($stmt, "i", $auctionID);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_bind_result($stmt, $auctionID, $itemID, $startPrice,
+                     $reservePrice, $endDate, $viewCount,
+                     $buyerComment, $buyerRate, $buyerReviewDate,
+                     $sellerComment, $sellerRate, $sellerReviewDate, $winnerID, $startDate);
+if (!(mysqli_stmt_fetch($stmt))){
+    echo "failed to fetch acution details";
+    //header("Location:noconnect.php");
 }
+mysqli_stmt_close($stmt);
 
 // Fetch item details
-$stmt = $connection -> prepare("SELECT * FROM `item` WHERE `item_id` == ?");
-$stmt -> bind_param("i", $itemID);
-$stmt -> execute();
-$stmt -> bind_result("iiss", $itemID, $sellerID, $itemName, $itemDescription);
-if (!($stmt -> fetch())){
-    header("Location:noconnect.php");
+$stmt = mysqli_stmt_init($connection);
+$stmt = mysqli_prepare($connection, "SELECT * FROM `item` WHERE `item_id` = ?");
+mysqli_stmt_bind_param($stmt, "i", $itemID);
+mysqli_stmt_execute($stmt );
+mysqli_stmt_bind_result($stmt, $itemID, $sellerID, $itemName, $itemDescription, $itemBrand, $itemDescription);
+if (!(mysqli_stmt_fetch($stmt))){
+    echo "failed to fetch item details";
+    //header("Location:noconnect.php");
 }
+mysqli_stmt_close($stmt);
+
 // Fetch seller name
-$stmt = $connection -> prepare("SELECT `user_name` FROM `user`
-                                WHERE `user_id` == ?");
-$stmt -> bind_param("i", $sellerID);
-$stmt -> execute();
-$stmt -> bind_result("s",$sellerName);
-if (!($stmt -> fetch())){
-    header("Location:noconnect.php");
+$stmt = mysqli_stmt_init($connection);
+$query = "SELECT `user_email` FROM `user` WHERE `user_id` = ?";
+$stmt = mysqli_prepare($connection, $query);
+mysqli_stmt_bind_param($stmt, "i", $sellerID);
+mysqli_stmt_execute($stmt );
+mysqli_stmt_bind_result($stmt, $sellerName);
+if (!(mysqli_stmt_fetch($stmt))){
+    echo "failed to fetch seller name";
+    //header("Location:noconnect.php");
 }
+mysqli_stmt_close($stmt);
 
 // Update view count
-$stmt = $connection -> prepare("UPDATE `auction` SET `view_count` = ?
-                                WHERE `auction_id` == ?");
-$stmt -> bind_param("ii", 1+$viewCount, $auctionID);
-$stmt -> execute();
+$stmt = mysqli_stmt_init($connection);
+$stmt = mysqli_prepare($connection, "UPDATE `auction` SET `view_count` = ?
+                                WHERE `auction_id` = ?");
+$viewCount++;
+mysqli_stmt_bind_param($stmt, "ii", $viewCount, $auctionID);
+mysqli_stmt_execute($stmt );
+mysqli_stmt_close($stmt);
 
 // Prepare to fetch item categories
-$catStmt = $connection -> prepare("SELECT c.category_name
+$catStmt = mysqli_stmt_init($connection);
+$catStmt = mysqli_prepare($connection, "SELECT c.category_name
                                    FROM `item_category` ic JOIN `category` c
-                                        ON ic.category_id == c.category_id
-                                   WHERE ic.item_id == ?");
-$catStmt -> bind_param("i", $itemID);
-$catStmt -> execute();
-$catStmt -> bind_result("s", $categoryName);
+                                        ON ic.category_id = c.category_id
+                                   WHERE ic.item_id = ?");
+mysqli_stmt_bind_param($catStmt, "i", $itemID);
+mysqli_stmt_execute($catStmt);
+mysqli_stmt_bind_result($catStmt, $categoryName);
 
 // Prepare to fetch bid details
-$bidStmt = $connection -> prepare("SELECT * FROM `bid` WHERE `auction_id` == ?
+$bidStmt = mysqli_stmt_init($connection);
+$bidStmt = mysqli_prepare($connection, "SELECT * FROM `bid` WHERE `auction_id` = ?
                                    ORDER BY `price` LIMIT 20");
-$bidStmt -> bind_param("i", $auctionID);
-$bidStmt -> execute();
-$bidStmt -> bind_result("iids", $buyerID, $auctionID, $bidAmount, $bidDate);
+mysqli_stmt_bind_param($bidStmt, "i", $auctionID);
+mysqli_stmt_execute($bidStmt);
+mysqli_stmt_bind_result($bidStmt, $buyerID, $auctionID, $bidAmount, $bidDate);
 
 // Set flags to determine display
 $loggedIn = isset($userID);
 $auctionOver = $endDate < date("Y-m-d H:i:s");
 $selling = $loggedIn and ($sellerID = $userID);
 $winning = isset($winnerID) and ($loggedIn and ($winnerID == $userID));
-$anyBids = ($bidStmt -> fetch());
+$anyBids = (mysqli_stmt_fetch($bidStmt));
 $hiBid = $anyBids ? $bidAmount : 0.00;
 $gotReserve = $anyBids and ($hiBid >= $reservePrice);
 
 // Determine if user placed a bid in this auction or is watching
 if ($loggedIn){
-    $stmt = $connection -> prepare("SELECT MAX(`price`) FROM `bid`
-                                    WHERE `buyer_id` == ?");
-    $stmt -> bind_param("i", $userID);
-    $stmt -> execute();
-    $stmt -> bind_result("i" $userHiBid);
-    $hasBid = $stmt -> fetch();
-    $watching = isset($userHiBid) and ($userHiBid == 0.00)
+    $stmt = mysqli_prepare($connection, "SELECT MAX(`price`) FROM `bid`
+                                    WHERE `buyer_id` = ?");
+    mysqli_stmt_bind_param($stmt, "i", $userID);
+    mysqli_stmt_execute($stmt );
+    mysqli_stmt_bind_result($stmt, $userHiBid);
+    $hasBid = mysqli_stmt_fetch($stmt);
+    $watching = isset($userHiBid) and ($userHiBid == 0.00);
 } else {
     $hasBid = false;
     $watching = false;
@@ -155,16 +170,17 @@ if ($auctionOver){
 // Header (including user status)
 echo "<h1>$itemName" . (($userStatus == "") ? ""
           : "<span class=\"label label-$alertType\">"
-              . strtoupper($userStatus) . "</span>" .
+              . strtoupper($userStatus) . "</span>") .
      "</h1>";
 
 echo "<div class=\"row\">";
 // Seller's info about item
 // TODO: Picture, other info
 echo "<div class=\"col-sm-8\"><p>$itemDescription</p><h4>Categories</h4><ul>";
-while ($catStmt -> fetch()){
+while (mysqli_stmt_fetch($catStmt)){
     echo "<li>$categoryName</li>";
 }
+mysqli_stmt_close($catStmt);
 echo "</ul></div>";
 
 // Site's stats about auction
@@ -201,9 +217,10 @@ echo "<h2>Bid history</h2>";
 if ($anyBids){
     echo "<table class=\"table\">
               <thead><tr><th>Date</th><th>Amount</th></tr></thead>";
-              // special formatting for top bid
-    echo "    <tr class=\"$alertType\"><td>$bidDate</td><td>&pound;$bidAmount</td></tr>";
-    while ($bidStmt -> fetch()){
+              // special formatting for top row
+              $rowType = $winning ? "success" : ($hasbid ? ($auctionOver ? "danger" : "warning") : "info");
+    echo "    <tr class=\"$rowType\"><td>$bidDate</td><td>&pound;$bidAmount</td></tr>";
+    while (mysqli_stmt_fetch($bidStmt)){
         $rowType = ($buyerID == $userID) ? "info" : "default";
         echo "<tr class=\"$rowType\"><td>$bidDate</td><td>&pound;$bidAmount</td></tr>";
         }
@@ -211,4 +228,5 @@ if ($anyBids){
 } else {
     echo "<p><small>No bids for this item</small></p>";
 }
+mysqli_stmt_close($bidStmt);
 ?>
