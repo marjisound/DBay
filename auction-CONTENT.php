@@ -2,10 +2,13 @@
 
 //include "connect.php";
 $auctionID = $_GET["a"];
+$_SESSION["user_id"] = 3; // Delete this line from final app
 $userID = $_SESSION["user_id"];
 if (!isset($auctionID)){
-    header("Location:noauction.php");
+    echo "no such auction";
+    //header("Location:noauction.php");
 }
+$_SESSION["current_auction"] = $auctionID;
 
 // Fetch auction details
 $stmt = mysqli_stmt_init($connection);
@@ -27,7 +30,7 @@ $stmt = mysqli_stmt_init($connection);
 $stmt = mysqli_prepare($connection, "SELECT * FROM `item` WHERE `item_id` = ?");
 mysqli_stmt_bind_param($stmt, "i", $itemID);
 mysqli_stmt_execute($stmt );
-mysqli_stmt_bind_result($stmt, $itemID, $sellerID, $itemName, $itemDescription, $itemBrand, $itemDescription);
+mysqli_stmt_bind_result($stmt, $itemID, $sellerID, $itemName, $itemDescription, $itemBrand, $itemCondition);
 if (!(mysqli_stmt_fetch($stmt))){
     echo "failed to fetch item details";
     //header("Location:noconnect.php");
@@ -36,7 +39,7 @@ mysqli_stmt_close($stmt);
 
 // Fetch seller name
 $stmt = mysqli_stmt_init($connection);
-$query = "SELECT `user_email` FROM `user` WHERE `user_id` = ?";
+$query = "SELECT `user_email` FROM `users` WHERE `user_id` = ?";
 $stmt = mysqli_prepare($connection, $query);
 mysqli_stmt_bind_param($stmt, "i", $sellerID);
 mysqli_stmt_execute($stmt );
@@ -47,16 +50,19 @@ if (!(mysqli_stmt_fetch($stmt))){
 }
 mysqli_stmt_close($stmt);
 
-// Update view count
-$stmt = mysqli_stmt_init($connection);
-$stmt = mysqli_prepare($connection, "UPDATE `auction` SET `view_count` = ?
-                                WHERE `auction_id` = ?");
-$viewCount++;
-mysqli_stmt_bind_param($stmt, "ii", $viewCount, $auctionID);
-mysqli_stmt_execute($stmt );
-mysqli_stmt_close($stmt);
+// Update view count (unless auction is over)
+$auctionOver = $endDate < date("Y-m-d H:i:s");
+if (!$auctionOver){
+    $stmt = mysqli_stmt_init($connection);
+    $stmt = mysqli_prepare($connection, "UPDATE `auction` SET `view_count` = ?
+                           WHERE `auction_id` = ?");
+    $viewCount++;
+    mysqli_stmt_bind_param($stmt, "ii", $viewCount, $auctionID);
+    mysqli_stmt_execute($stmt );
+    mysqli_stmt_close($stmt);
+}
 
-// Prepare to fetch item categories
+// Fetch item categories
 $catStmt = mysqli_stmt_init($connection);
 $catStmt = mysqli_prepare($connection, "SELECT c.category_name
                                    FROM `item_category` ic JOIN `category` c
@@ -64,34 +70,52 @@ $catStmt = mysqli_prepare($connection, "SELECT c.category_name
                                    WHERE ic.item_id = ?");
 mysqli_stmt_bind_param($catStmt, "i", $itemID);
 mysqli_stmt_execute($catStmt);
-mysqli_stmt_bind_result($catStmt, $categoryName);
+$catResult = mysqli_stmt_get_result($catStmt);
+mysqli_stmt_close($catStmt);
+$categories = array();
+$n=0;
+while ($row = mysqli_fetch_array($catResult, MYSQLI_NUM)){
+    foreach($row as $r){
+        $categories[$n] = $r;
+        $n++;
+    }
+}
+//mysqli_stmt_bind_result($catStmt, $categoryName);
 
-// Prepare to fetch bid details
+// Fetch bid details
 $bidStmt = mysqli_stmt_init($connection);
-$bidStmt = mysqli_prepare($connection, "SELECT * FROM `bid` WHERE `auction_id` = ?
-                                   ORDER BY `price` LIMIT 20");
+$bidStmt = mysqli_prepare($connection, "SELECT * FROM `bid` WHERE `auction_id` = ? AND `price` != -0.01
+                                   ORDER BY `price` DESC LIMIT 20");
 mysqli_stmt_bind_param($bidStmt, "i", $auctionID);
 mysqli_stmt_execute($bidStmt);
-mysqli_stmt_bind_result($bidStmt, $buyerID, $auctionID, $bidAmount, $bidDate);
+$bidResult = mysqli_stmt_get_result($bidStmt);
+mysqli_stmt_close($bidStmt);
+$bids = array();
+$n=0;
+while ($row = mysqli_fetch_array($bidResult, MYSQLI_NUM)){
+    $bids[$n] = $row;
+    $n++;
+}
+//mysqli_stmt_bind_result($bidStmt, $buyerID, $auctionID, $bidAmount, $bidDate);
 
 // Set flags to determine display
 $loggedIn = isset($userID);
-$auctionOver = $endDate < date("Y-m-d H:i:s");
-$selling = $loggedIn and ($sellerID = $userID);
-$winning = isset($winnerID) and ($loggedIn and ($winnerID == $userID));
-$anyBids = (mysqli_stmt_fetch($bidStmt));
-$hiBid = $anyBids ? $bidAmount : 0.00;
-$gotReserve = $anyBids and ($hiBid >= $reservePrice);
+$selling = $loggedIn ? ($sellerID == $userID) : false;
+$winning = isset($winnerID) ? ($loggedIn ? ($winnerID == $userID) : false) : false;
+$anyBids = (count($bids) != 0);
+$hiBid = $anyBids ? $bids[0][2] : 0.00;
+$gotReserve = $anyBids ? ($hiBid >= $reservePrice) : false;
 
 // Determine if user placed a bid in this auction or is watching
 if ($loggedIn){
     $stmt = mysqli_prepare($connection, "SELECT MAX(`price`) FROM `bid`
-                                    WHERE `buyer_id` = ?");
-    mysqli_stmt_bind_param($stmt, "i", $userID);
+                                    WHERE `buyer_id` = ? AND `auction_id` = ?");
+    mysqli_stmt_bind_param($stmt, "ii", $userID, $auctionID);
     mysqli_stmt_execute($stmt );
     mysqli_stmt_bind_result($stmt, $userHiBid);
-    $hasBid = mysqli_stmt_fetch($stmt);
-    $watching = isset($userHiBid) and ($userHiBid == 0.00);
+    mysqli_stmt_fetch($stmt);
+    $watching = ($userHiBid == -0.01);
+    $hasBid = isset($userHiBid) ? ($userHiBid != -0.01) : false;
 } else {
     $hasBid = false;
     $watching = false;
@@ -118,11 +142,15 @@ if ($auctionOver){ // auction over
         } else {
             $alertType = "danger";
             $alertMessage = "<p>Although your bid was the highest,
-                             it was below the reserve price. Consequently,
-                             this auction ends in no sale.</p>";
+                             it was below the reserve price of &pound;$reservePrice.
+                             Consequently, this auction ends in no sale.</p>";
             $userStatus = "too low";
         }
-    } else if ($hasBid) { // user has bid which is not highest
+    } else if ($watching) { // was watching
+        $alertType = "info";
+        $alertMessage = "";
+        $userStatus = "watched";
+    } else if ($hasBid){// user has bid which is not highest
         $alertType = "danger";
         $alertMessage = $gotReserve ? "<p>You lost the auction. The winning
                                        bid was &pound;$hiBid</p>"
@@ -148,12 +176,15 @@ if ($auctionOver){ // auction over
     } else if ($winning){ // user has highest bid
         $alertType = "success";
         $userStatus = "winning";
+    } else if ($watching){
+        $alertType = "info";
+        $userStatus = "watching";
     } else if ($hasBid) { // user has bid which is not highest
         $alertType = "warning";
         $userStatus = "losing";
     } else { // user has not bid
         $alertType = "info";
-        $userStatus = $watching ? "watching" : "";
+        $userStatus = "";
     }
 }
 
@@ -177,18 +208,18 @@ echo "<div class=\"row\">";
 // Seller's info about item
 // TODO: Picture, other info
 echo "<div class=\"col-sm-8\"><p>$itemDescription</p><h4>Categories</h4><ul>";
-while (mysqli_stmt_fetch($catStmt)){
-    echo "<li>$categoryName</li>";
+foreach ($categories as $c){
+    echo "<li>$c</li>";
 }
-mysqli_stmt_close($catStmt);
+//mysqli_stmt_close($catStmt);
 echo "</ul></div>";
 
 // Site's stats about auction
 // TODO: Calculate time remaining
 echo "<div class=\"col-sm-4\"><h2>Auction details</h2><dl>
-          <dt>Highest bid</dt><dd>" . ($anyBids ? $hiBid :
+          <dt>Highest bid</dt><dd>" . ($anyBids ? "&pound;" . $hiBid :
               "<small>No bids for this item</small>") . "</dd>"
-          . ($hasBid ? "<dt>Your highest bid</dt><dd>&pound;$userHiBid</dd>" : "") .
+          . ($hasBid ? ($watching ? "" : "<dt>Your highest bid</dt><dd>&pound;$userHiBid</dd>") : "") .
          "<dt>End date</dt><dd>$endDate</dd>
           <dt>View count</dt><dd>$viewCount</dd>
           <dt>Seller</dt><dd><a href=\"user.php?u=$sellerID\">$sellerName</a></dd>
@@ -197,36 +228,42 @@ echo "<div class=\"col-sm-4\"><h2>Auction details</h2><dl>
 echo "</div>";
 
 // Bid form
-echo "<button type=\"button\"
-           class=\"btn btn-primary btn-lg\"
-           data-toggle=\"collapse\"
-           data-target=\"#bid-form\">
-           Place bid
-       </button>
-       <div id=\"bid-form\" class=\"collapse\">
-           <form action=\"place-bid.php\" method=\"post\" class=\"form-inline\">
-               <label>&pound;</label>
-               <input type=\"number\" name=\"amount\" step=\"0.01\"
-                   min=\"" . ($hiBid + 0.01) ."\" value=\"" . ($hiBid + 0.01) ."\">
-               <button type=\"submit\" class=\"btn btn-primary btn-sm\">Submit</button>
-           </form>
-       </div>";
+if ($loggedIn ? !($auctionOver or $selling) : false)
+echo "<div id=\"bid-form\" >
+        <form action=\"place-bid.php\" method=\"post\" class=\"form-inline\">
+            <label>&pound;</label>
+            <input type=\"number\" name=\"amount\" step=\"0.01\"
+                min=\"" . (max($hiBid + 0.01,$startPrice)) ."\" value=\"" . (max($hiBid + 0.01,$startPrice)) ."\">
+            <button type=\"submit\" class=\"btn btn-primary btn-sm\">Place bid</button>
+        </form>
+    </div>";
 
 // Bid history
 echo "<h2>Bid history</h2>";
 if ($anyBids){
     echo "<table class=\"table\">
               <thead><tr><th>Date</th><th>Amount</th></tr></thead>";
-              // special formatting for top row
-              $rowType = $winning ? "success" : ($hasbid ? ($auctionOver ? "danger" : "warning") : "info");
-    echo "    <tr class=\"$rowType\"><td>$bidDate</td><td>&pound;$bidAmount</td></tr>";
-    while (mysqli_stmt_fetch($bidStmt)){
-        $rowType = ($buyerID == $userID) ? "info" : "default";
-        echo "<tr class=\"$rowType\"><td>$bidDate</td><td>&pound;$bidAmount</td></tr>";
+    $firstRow = true;
+    foreach ($bids as $bid){
+        $buyerID = $bid[0];
+        $bidDate = $bid[3];
+        $bidAmount = $bid[2];
+        if ($firstRow){ // special formatting for top row
+            $rowType = $winning ? "success" :
+                       ($selling ? ($gotReserve ? "success" : ($auctionOver ? "danger" : "warning")) :
+                       ($hasBid ? ($auctionOver ? "danger" : "warning") : "info"));
+            $lastBidDate = $bids[0][3];
+            $lastBidAmount = $bids[0][2];
+            echo "<tr class=\"$alertType\"><td>$lastBidDate</td><td>&pound;$lastBidAmount</td></tr>";
+            $firstRow = false;
+        } else {
+            $rowType = ($buyerID == $userID) ? "info" : "default";
+            echo "<tr class=\"$rowType\"><td>$bidDate</td><td>&pound;$bidAmount</td></tr>";
         }
+    }
     echo "</table>";
 } else {
     echo "<p><small>No bids for this item</small></p>";
 }
-mysqli_stmt_close($bidStmt);
+//mysqli_stmt_close($bidStmt);
 ?>
