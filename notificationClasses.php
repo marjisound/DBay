@@ -13,27 +13,13 @@ class NotifyWatchEnd{
     private $viewCount;
     private $hiBid;
 	public function __construct(){
-        // most attributes passed in by script
-		$auctionID = func_get_arg(0);
-        $this->auctionID = $auctionID;
+        $this->auctionID = func_get_arg(0);
         $this->itemName = func_get_arg(1);
-		$startPrice = func_get_arg(2);
+		$this->startPrice = func_get_arg(2);
         $this->reservePrice = func_get_arg(3);
         $this->endDate = func_get_arg(4);
         $this->viewCount = func_get_arg(5);
 		$this->hiBid = func_get_arg(6);
-		
-        // must determine highest bid
-        global $connection;
-        $stmt = mysqli_prepare($connection, "SELECT MAX(`price`)
-                                        FROM `bid`
-                                        WHERE `auction_id` = ?
-										GROUP BY `auction_id`");
-        mysqli_stmt_bind_param($stmt,"i",$auctionID);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $hiBid);
-        mysqli_stmt_fetch($stmt);
-		$this->hiBid = $hiBid;
 	}
     
     
@@ -49,7 +35,7 @@ class NotifyWatchEnd{
         <h3>Auction for <a href=\"auction.php?a=$auctionID\">$itemName</a> ended</h3>
         <p>The auction for <a href=\"auction.php?a=$auctionID\">$itemName</a>
 		ended on $endDate.</p>";
-		if ($hiBid == 0.00){
+		if ($hiBid == -0.01){
 			echo "<p>There were no bids in this auction.</p>
 			<p>The start price was &pound;$startPrice</p>";
 		} else {
@@ -74,21 +60,11 @@ class NotifyWatchCont{
     private $viewCount;
     private $hiBid;
 	public function __construct(){
-        // most attributes passed in by script
         $this->auctionID = func_get_arg(0);
         $this->itemName = func_get_arg(1);
         $this->endDate = func_get_arg(2);
         $this->viewCount = func_get_arg(3);
-		
-        // must determine highest bid
-        global $connection;
-        $stmt = mysqli_stmt_prepare($connection, "SELECT MAX(`price`)
-                                        FROM `bid`
-                                        WHERE `auction_id` = ?");
-        mysqli_stmt_bind_param($stmt, "i",$this->auctionID);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $this->hiBid);
-        mysqli_stmt_fetch($stmt);
+		$this->hiBid = func_get_arg(4);
 	}
     
     
@@ -100,7 +76,7 @@ class NotifyWatchCont{
 		$hiBid = $this->hiBid;
         echo "<div class=\"alert alert-info\">
         <h3>Auction for <a href=\"auction.php?a=$auctionID\">$itemName</a> ongoing</h3>";
-        if ($hiBid==0.00){
+        if ($hiBid==-0.01){
             echo "<p>There are currently no bids
 			for <a href=\"auction.php?a=$auctionID\">$itemName</a>.</p>";
         } else{
@@ -185,22 +161,12 @@ class NotifyLost{
     private $userBid;
 	private $hiBid;
 	public function __construct(){
-		// Most attributes passed in by script
-        $this->auctionID = func_get_arg(0);
+		$this->auctionID = func_get_arg(0);
         $this->itemName = func_get_arg(1);
         $this->reservePrice = func_get_arg(2);
         $this->endDate = func_get_arg(3);
         $this->userBid = func_get_arg(4);
-		
-        // must determine highest bid
-        global $connection;
-        $stmt = $connection -> prepare("SELECT MAX(`price`)
-                                        FROM `bid`
-                                        WHERE `auction_id` = ?");
-        mysqli_stmt_bind_param($stmt, "i",$this->auctionID);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $this->hiBid);
-        mysqli_stmt_fetch($stmt);
+		$this->hiBid = func_get_arg(5);
 	}
     
     
@@ -268,16 +234,7 @@ class NotifyOutbid{
         $this->itemName = func_get_arg(1);
         $this->endDate = func_get_arg(2);
         $this->userBid = func_get_arg(3);
-		
-        // must determine highest bid
-        global $connection;
-        $stmt = $connection -> prepare("SELECT MAX(`price`)
-                                        FROM `bid`
-                                        WHERE `auction_id` = ?");
-        mysqli_stmt_bind_param($stmt, "i",$this->auctionID);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $this->hiBid);
-        mysqli_stmt_fetch($stmt);
+		$this->hiBid = func_get_arg(4);
 	}
     
     
