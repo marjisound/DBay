@@ -1,10 +1,10 @@
 <?php
-error_reporting(-1);
-ini_set('display_errors', 'On');
 
 include "notificationClasses.php";
-$_SESSION["user_id"] = 2; // NB: remove this line in real app
+$_SESSION["user_id"] = 3; // NB: remove this line in real app
 $userID = $_SESSION["user_id"];
+// The following variables would be used for displaying a limited number of results
+// that the user sets. This feature is not currently implemented
 $numResults = 20;
 $getMoreBuy = 0;
 $getMoreSell = 0;
@@ -17,22 +17,31 @@ $stmt = mysqli_stmt_init($connection);
 $stmt = mysqli_prepare($connection, "SELECT a.auction_id, i.item_name, i.seller_id,
                                             a.start_price, a.reserve_price,
                                             a.end_date, a.view_count, a.buyer_id,
-                                            MAX(b.price)
+                                            MAX(b.price), u.hi_bid
                                      FROM `auction`   a
-                                          JOIN `bid`  b ON a.auction_id = b.auction_id
                                           JOIN `item` i ON a.item_id = i.item_id
-                                     WHERE b.buyer_id = ?
+                                          JOIN (SELECT auction_id, MAX(price) AS hi_bid
+                                                FROM `bid`
+                                                WHERE `buyer_id` = ?
+                                                GROUP BY `auction_id`)
+                                                u ON a.auction_id = u.auction_id
+                                          JOIN `bid`  b ON a.auction_id = b.auction_id
                                      GROUP BY b.auction_id
                                      ORDER BY a.end_date DESC
                                      LIMIT ?
-                                     OFFSET ?");
-//echo gettype($stmt);
+                                     OFFSET ?"); /* Note about this query:
+                                                  * The bid table is used *twice*:
+                                                  * First, in the inner query (table u),
+                                                  * to determine the user's highest bid
+                                                  * in each auction.
+                                                  * Then, in the outer query (table b),
+                                                  * to determine the auction's highest bid
+                                                  * overall.*/
 $offset = $getMoreBuy*$numResults;
 mysqli_stmt_bind_param($stmt, "iii", $userID, $numResults, $offset);
-//echo gettype($stmt);/*
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $auctionID, $itemName, $sellerID, $startPrice,
-                     $reservePrice, $endDate, $viewCount, $winnerID,
+                     $reservePrice, $endDate, $viewCount, $winnerID, $hiBid,
                      $userHiBid);
 
 echo "<h2>Buyer notifications</h2>";
@@ -41,35 +50,36 @@ if (!(mysqli_stmt_fetch($stmt))){ // No notifications to show
     echo "<p>You aren't watching any auctions.</p>";
 } else { // Loop over watched auctions, determine notification type & display
     do{
-        $watching    = $userHiBid == 0.00;
+        $watching    = $userHiBid == -0.01;
         $auctionOver = $endDate < date("Y-m-d H:i:s");
-        $winning     = $userID == $winnerID;
+        $winning     = ($userID == $winnerID);
         if ($watching){
             if ($auctionOver){
                 $bidStmt = mysqli_stmt_init($connection);
                 $bidStmt = mysqli_prepare($connection, "SELECT * FROM `bid`");
-                echo ($bidStmt ? "true" : "false");
-                echo "<p>A watched auction ended</p>";
-                /*$note = new NotifyWatchEnd($auctionID, $itemName, $startPrice,
-                                          $reservePrice, $endDate, $viewCount)
-               ;    $note -> show();*/
+                $note = new NotifyWatchEnd($auctionID, $itemName, $startPrice,
+                                          $reservePrice, $endDate, $viewCount, $hiBid);
+                $note -> show();
             } else {
-                $note = new NotifyWatchCont($auctionID, $itemName, $endDate,
-                                    $viewCount);    $note -> show();
+                $note = new NotifyWatchCont($auctionID, $itemName, $endDate, $viewCount, $hiBid);
+                $note -> show();
             }
         } else {
             if ($auctionOver){
                 if ($winning){
                     if ($userHiBid >= $reservePrice){
                         $note = new NotifyWon($auctionID, $itemName, $sellerID,
-                                      $userHiBid);    $note -> show();
+                                      $userHiBid);
+                        $note -> show();
                     } else {
                         $note = new NotifyTooLow($auctionID, $itemName, $reservePrice,
-                                         $endDate, $userHiBid);    $note -> show();
+                                         $endDate, $userHiBid);
+                        $note -> show();
                     }
                 } else {
                     $note = new NotifyLost($auctionID, $itemName, $reservePrice,
-                                   $endDate, $userHiBid);    $note -> show();
+                                   $endDate, $userHiBid, $hiBid);
+                    $note -> show();
                 }
             } else {
                 if ($winning){
@@ -77,7 +87,8 @@ if (!(mysqli_stmt_fetch($stmt))){ // No notifications to show
                                       $userHiBid);    $note -> show();
                 } else {
                     $note = new NotifyOutbid($auctionID, $itemName, $endDate,
-                                     $userHiBid);    $note -> show();
+                                     $userHiBid, $hiBid);
+                    $note -> show();
                 }
             }
         }
@@ -114,7 +125,7 @@ if (!(mysqli_stmt_fetch($stmt))){ // No notifications to show
 } else { // Loop over auctions, determine notification type & display
     do{
         $auctionOver = $endDate < date("Y-m-d H:i:s");
-        $gotBids     = isset($hiBid) and ($hiBid != 0.00);
+        $gotBids     = isset($hiBid) ? ($hiBid != -0.01) : false;
         $gotReserve  = isset($hiBid) ? ($hiBid >= $reservePrice) : false;
         if ($auctionOver){
             if ($gotReserve){
@@ -149,21 +160,4 @@ if (!(mysqli_stmt_fetch($stmt))){ // No notifications to show
 }
 mysqli_stmt_close($stmt);
 
-
-/*/ Function to find highest bid given auction id
-public function getHiBid($auctionID){
-    global $connection;
-    $stmt = mysqli_stmt_init($connection);
-    $stmt = mysqli_prepare($connection, "SELECT MAX(`price`)
-                           FROM `bid`
-                           WHERE `auction_id` = ?
-                           GROUP BY `auction_id`");
-    mysqli_stmt_bind_param($stmt,"i",$auctionID);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $hiBid);
-    mysqli_stmt_fetch($stmt);
-    mysqli_stmt_close($stmt);
-    return isset($hiBid) ? $hiBid : false;
-}
-*/
 ?>
