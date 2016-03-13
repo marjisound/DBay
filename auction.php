@@ -1,6 +1,6 @@
 <?php
-include 'C:/wamp/www/Db_project/includes/sessions.php';
-include 'C:/wamp/www/Db_project/includes/connections.php';
+include 'include/session.php';
+include 'include/connection.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
