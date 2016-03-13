@@ -1,4 +1,7 @@
 <?php
+error_reporting(-1);
+ini_set('display_errors', 'On');
+
 include "notificationClasses.php";
 $_SESSION["user_id"] = 2; // NB: remove this line in real app
 $userID = $_SESSION["user_id"];
