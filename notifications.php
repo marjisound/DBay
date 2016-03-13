@@ -18,7 +18,7 @@ include 'include/connection.php';
 
     <body>
         <div class="container-fluid">
-            <?php include "includes/header/header.php"; ?>
+            <?php include "include/header/header.php"; ?>
             <section class="row">
                 <div class="col-md-12">
                     <?php include "notifications-CONTENT.php"; ?>
