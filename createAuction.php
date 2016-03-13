@@ -1,9 +1,13 @@
-<?php include 'include/sessions.php' ?>
-<?php include 'include/connections.php' ?>
-<?php require_once'include/functions.php' ?>
-<?php  //shows all the variable 
+<?php 
+include 'include/sessions.php';
+include 'include/connections.php';
+require_once'include/functions.php';
+
+    //shows all the variable 
     extract($_POST);
 
+    //if the variable is not defined it will error without the isset, 
+    //with iseet it just doesn't go into the if statement
     if (isset($btnSubmit)) {
         $error="";
 
@@ -39,21 +43,28 @@
             // $query = "INSERT INTO `item` ("
             
             $target_dir = "uploads/";
+            //if a file has been submitted among other data, it will be stored in the $_FILES
+            //pathinfo returns 
             $path_parts = pathinfo($_FILES["flImage1"]["name"]);
             $extension = $path_parts['extension'];
+            //uniqid() produces a random number as an id
             $filename = 'image_' . date('Y-m-d-H-i-s') . '_' . uniqid() . '.'.$extension;
             $target_file = $target_dir.$filename;
 
+            //
             move_uploaded_file($_FILES["flImage1"]["tmp_name"], $target_file);
 
             $query = "INSERT INTO `item` (`sellerid`, `itemname`, `itemdescription`, `itemBrand`, `itemCondition`) VALUES(?, ?, ?, ?, ?)";
            
-            $stmt = mysqli_prepare($link, $query);
+            $stmt = mysqli_prepare($connection, $query);
             mysqli_stmt_bind_param($stmt,'isssi' , $_SESSION['userid'], $itemname, $itemdescription, $itemBrand, $condition);
+            //$resultset could get only true or false
             $result_set = mysqli_stmt_execute($stmt);
 
             if($result_set) {
-                $item_id = mysqli_insert_id($link);
+                //it gets the id of the last inserted record in the database
+                //id means a field that is auto incremented
+                $item_id = mysqli_insert_id($connection);
 
                 $query = "INSERT INTO `image` (`item_id`, `file_name`, `is_cover_image`) VALUES(?, ?, 1)";
                 $stmt = mysqli_prepare($link, $query);
@@ -61,7 +72,7 @@
                 mysqli_stmt_bind_param($stmt,'is' , $item_id, $filename);
                 $result_set = mysqli_stmt_execute($stmt);
 
-                echo "inyani id: ".$item_id;
+                
                 $query = "INSERT INTO `item_category` (`item_id`, `category_id`) VALUES(?, ?)";
                 $stmt = mysqli_prepare($link, $query);
                 //mysqli_insert_id outputs the last id stored in this set of code
