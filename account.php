@@ -37,10 +37,10 @@ endif;
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="css/account.css"/>
-        
+        <link rel="stylesheet" type="text/css" href="css/header.css"/>
         <script type="text/javascript" src="js/jquery-1.12.0.js"></script>
-        <script src="https://getaddress.io/js/jquery.getAddress-2.0.1.min.js"></script>
-        <script src="js/bootstrap/bootstrap.js"></script>
+         <script src="js/bootstrap/bootstrap.js"></script>
+        <script type="text/javascript" src="js/crafty_clicks_js_class_v4_9_2/crafty_postcode.class.js"></script>
         <script type="text/javascript" src="js/main.js"></script> 
     </head>
     <body>
@@ -52,6 +52,8 @@ endif;
             echo form_errors($form_error);
             echo "</div>";
         }
+
+        include 'include/header.php';
         ?>
         <div class="container">
             <form method = "post" action= "account.php" class="register">
@@ -87,36 +89,37 @@ endif;
                         <input type="text" maxlength="10" required = "" name="Phone" value=""/>
                     </p>
                     <!-- Postcode field -->
-                    <div id="postcode_lookup"></div>  
+                    <div id="postcode_lookup"></div> 
                     <p>
-                     <label>First Address *</label>
+                     <label>Postcode *</label>
+                    <input type="text" name="postcode" id="postcode"/>
+                    <button type="button" id="btnFindPostCode">Find Address</button>
+                    <span id="spnPostcode_result_display" style="display:none;">
+                        <span id="spnAJAXWait">Please Wait...</span>
+                       <select id="cmbPostCode" style="display:none;">
+                       </select>
+                    </span><br/>
+                    </p>
+                    <p>
+                     <label>Address Line 1 *</label>
                     <input id="line1" type="text" required = "" name="FAdd" value="" />
                     </p>
                     <p>
-                        <label>Second Address Line</label>
+                        <label>Address Line 2</label>
                         <input id="line2" type="text">   
                     </p>                                    
                     <p>
-                        <label>Town</label>
+                        <label>City *</label>
                         <input id="town" type="text">
                     </p>
-                    <p>
-                        <label>County</label>
-                        <input id="county" type="text">
-                    </p>
-                    <p>
-                        <label>Postcode</label>
-                        <input id="postcode" type="text" required = "" name="Postcode" value="">
-                    </p>
-                    
                 </fieldset>
-                <fieldset class="row3">
+               <!--  <fieldset class="row3">
                     
                     <div class="infobox"><h4>Helpful Information</h4>
                         <p>Here comes some explaining text, sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
                     </div>
                  
-                </fieldset>
+                </fieldset> -->
                 <fieldset class="row4">
                     <legend>Terms and Mailing
                     </legend>

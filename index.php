@@ -1,6 +1,8 @@
-<?php include 'include/sessions.php' ?>
-<?php include 'include/connections.php' ?>
-<?php require_once'include/functions.php' ?>
+<?php 
+include 'include/sessions.php';
+include 'include/connections.php';
+require_once'include/functions.php';
+?>
 <!doctype html>
 <html>
 <head>
@@ -77,14 +79,14 @@
 
 
   <!-- Left and right controls -->
-  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+<!--   <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
   </a>
   <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
     <span class="sr-only">Next</span>
-  </a>
+  </a> -->
 </div>
 
 <!-- Footer section -->

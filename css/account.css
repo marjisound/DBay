@@ -14,6 +14,9 @@ body, html {
 body {
     font-size: 70%;
 }
+.navbar {
+    margin-bottom: 10px;
+}
 p {
     padding: 7px 0 7px 0;
     font-weight: 500;
@@ -44,7 +47,7 @@ h4 {
 }
 form.register{
     width:800px;
-    margin: 20px auto 0px auto;
+    margin: 0px auto 0px auto;
     height:530px;
     background-color:#fff;
     padding:5px;
@@ -139,6 +142,8 @@ form.register label.obinfo{
 }
 form.register input{
     width: 140px;
+    height: 15px;
+    font-size: 10px;
     color: #505050;
     float: left;
     margin-right: 5px;
@@ -227,6 +232,9 @@ p.agreement label{
     width:390px;
     text-align:left;
     margin-top:3px;
+}
+form.register legend {
+    margin-bottom: 12px;
 }
 
 

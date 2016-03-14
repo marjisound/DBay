@@ -26,7 +26,7 @@ require_once('include/functions.php');
                 ?>
                 <li><a href="index.php">Home Page</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="notifications.php">Go to notifications</a></li>
                         <li><a href="#">Search By Category</a>

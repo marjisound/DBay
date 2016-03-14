@@ -150,4 +150,16 @@
 #decBox label {
     margin-top: 10px;
 }
+li a {
+    font-size: 12px;
+}
+a b {
+    font-size: 15px;
+}
+.navbar-nav > li > a {
+    margin-top: 10px;
+}
+
+
+
 

@@ -18,7 +18,7 @@
                
             $query .= " where auction_id = ?";
 
-            $stmt = mysqli_prepare($link, $query);
+            $stmt = mysqli_prepare($connection, $query);
 
             mysqli_stmt_bind_param($stmt,'isi', $score, $comments, $auction_id);
 

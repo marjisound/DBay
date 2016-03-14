@@ -3,6 +3,8 @@ include 'include/sessions.php';
 include 'include/connections.php';
 require_once'include/functions.php';
 
+//$_SESSION['userid'] = 1;
+
     //shows all the variable 
     extract($_POST);
 
@@ -54,7 +56,7 @@ require_once'include/functions.php';
             //
             move_uploaded_file($_FILES["flImage1"]["tmp_name"], $target_file);
 
-            $query = "INSERT INTO `item` (`sellerid`, `itemname`, `itemdescription`, `itemBrand`, `itemCondition`) VALUES(?, ?, ?, ?, ?)";
+            $query = "INSERT INTO `item` (`seller_id`, `item_name`, `item_description`, `item_brand`, `item_condition`) VALUES(?, ?, ?, ?, ?)";
            
             $stmt = mysqli_prepare($connection, $query);
             mysqli_stmt_bind_param($stmt,'isssi' , $_SESSION['userid'], $itemname, $itemdescription, $itemBrand, $condition);
@@ -67,14 +69,14 @@ require_once'include/functions.php';
                 $item_id = mysqli_insert_id($connection);
 
                 $query = "INSERT INTO `image` (`item_id`, `file_name`, `is_cover_image`) VALUES(?, ?, 1)";
-                $stmt = mysqli_prepare($link, $query);
+                $stmt = mysqli_prepare($connection, $query);
                 //mysqli_insert_id outputs the last id stored in this set of code
                 mysqli_stmt_bind_param($stmt,'is' , $item_id, $filename);
                 $result_set = mysqli_stmt_execute($stmt);
 
                 
                 $query = "INSERT INTO `item_category` (`item_id`, `category_id`) VALUES(?, ?)";
-                $stmt = mysqli_prepare($link, $query);
+                $stmt = mysqli_prepare($connection, $query);
                 //mysqli_insert_id outputs the last id stored in this set of code
                 mysqli_stmt_bind_param($stmt,'ii' , $item_id, $cmbCategory);
                 $result_set = mysqli_stmt_execute($stmt);
@@ -82,7 +84,7 @@ require_once'include/functions.php';
 
                 //now() + interval ? day will calculate the exact time and date
                 $query = "INSERT INTO `auction` (`item_id`, `start_price`, `reserve_price`, `end_date`, `start_date`) VALUES(?, ?, ?, now() + interval ? day, now())";
-                $stmt = mysqli_prepare($link, $query);
+                $stmt = mysqli_prepare($connection, $query);
                 //mysqli_insert_id outputs the last id stored in this set of code
                 mysqli_stmt_bind_param($stmt,'idds' , $item_id, $start_price, $reservePrice, $duration);
                 $result_set = mysqli_stmt_execute($stmt);
@@ -206,14 +208,16 @@ require_once'include/functions.php';
                                     <option value="0">Please select one</option>
                                     <?php
                                       $query = "select * from category";
+                                      var_dump("hello");
 
-                                      $result_set = mysqli_query($link, $query);
+                                      $result_set = mysqli_query($connection, $query);
                                       //find how many rows result has
                                       //if(mysqli_num_rows($result) > 0){
                                       //fetch returns false when it reaches after the last row
                                         while($row = mysqli_fetch_assoc($result_set)){
-                                            echo '<option value="'.$row['category-id'].'">'.$row['category-name'].'</option>';
+                                            echo '<option value="'.$row['category_id'].'">'.$row['category_name'].'</option>';
                                         }
+
                                       //}
                                       //this empties the $result
                                       mysqli_free_result($result_set);
