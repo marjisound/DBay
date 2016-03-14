@@ -1,7 +1,6 @@
 <?php include 'include/sessions.php' ?>
 <?php include 'include/connections.php' ?>
 <?php require_once'include/functions.php' ?>
-
 <!doctype html>
 <html>
 <head>

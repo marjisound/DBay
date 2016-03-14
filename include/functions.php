@@ -151,12 +151,16 @@ function find_user($user_email)
 	global $connection;
 	$query = " SELECT * ";
 	$query .= "FROM users ";
-	$query .= "WHERE user_email = '$user_email'";
-	$result = mysqli_query($connection,$query);
-	return $result;
+	$query .= "WHERE user_email = ?";
+	$stmt = mysqli_prepare($connection, $query);
+    mysqli_stmt_bind_param($stmt,'s' , $user_email);
+    mysqli_stmt_execute($stmt);
+    $result_set = mysqli_stmt_get_result($stmt);
+	return $result_set;
 }
 function get_id($user_email)
 {
+	//We don't need this function in login
 	global $connection;
 	$query = " SELECT user_id ";
 	$query .= "FROM users ";
@@ -164,6 +168,7 @@ function get_id($user_email)
 	$result = mysqli_query($connection,$query);
 	confirm_query($result);
 	return $result;
+
 }
 function get_email($id)
 {

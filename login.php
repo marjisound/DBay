@@ -8,11 +8,13 @@ require_once 'include/functions.php';
 //Processing user login
 
 	if(isset($_POST['Login'])):
-		$user_email = trim($_POST['user_email']);
-		$password 	= trim($_POST['password']);
-		//escape sql
-		$user_email = mysqli_prep($user_email);
-		$password = mysqli_prep($password);
+		extract($_POST);
+		$user_email = trim($user_email);
+		$password 	= trim($password);
+		// //escape sql
+		// $user_email = mysqli_prep($user_email);
+		// $password = mysqli_prep($password);
+
 		// Now check database to see if user exists
 		$result = find_user($user_email);
 		if($result->num_rows === 0):
@@ -26,9 +28,9 @@ require_once 'include/functions.php';
 			if(password_verify($password,$prev_password)):
 			//Once authenticated, get their user_id and store this in a session,redirect to 
 			//notifications page.
-				$user_id = get_id($user_email);
-				$id_row = $user_id->fetch_assoc();
-				$_SESSION['user_id'] = $id_row['user_id'];
+				// $user_id = get_id($user_email);
+				// $id_row = $user_id->fetch_assoc();
+				$_SESSION['user_id'] = $row['user_id'];
 				redirect_to('notifications.php');
 			else:
 				$errors['password'] = "Password does not match";
