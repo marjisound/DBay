@@ -1,9 +1,9 @@
 <?php
-include 'include/session.php';
-include 'include/connection.php';
+include 'include/sessions.php';
+include 'include/connections.php';
 //include "connect.php";
 
-$auctionID = $_GET["a"];
+$auctionID = $_GET["a_id"];
 $_SESSION["user_id"] = 1; // Delete this line from final app
 $userID = $_SESSION["user_id"];
 if (!isset($auctionID)){
@@ -214,7 +214,7 @@ $_SESSION["auction_data"] = array ("auction_id" => $auctionID,
 
     <body>
         <div class="container-fluid">
-            <?php include "include/header/header.php"; ?>
+            <?php include "include/header.php"; ?>
             <section class="row">
                 <div class="col-md-12">
                     <?php include "auction-CONTENT.php"; ?>

@@ -1,7 +1,7 @@
 <?php
 
-include 'include/session.php';
-include 'include/connection.php';
+include 'include/sessions.php';
+include 'include/connections.php';
 // Set database connection, user id, auction id
 //$_SESSION["user_id"] = 3; // Delete this line from final app
 $userID = $_SESSION["user_id"];
@@ -100,7 +100,7 @@ if ($userBid >= $minNewBid){
 
     <body>
         <div class="container-fluid">
-            <?php include "include/header/header.php"; ?>
+            <?php include "include/header.php"; ?>
             <section class="row">
                 <div class="col-md-12">
                     <?php echo "<div class=\"alert alert-$status\"><p>$message</p></div>
