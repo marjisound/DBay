@@ -1,6 +1,6 @@
 <?php
-include 'include/session.php';
-include 'include/connection.php';
+include 'include/sessions.php';
+include 'include/connections.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,12 +13,16 @@ include 'include/connection.php';
 
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link href="css/style.css" rel="stylesheet">
+
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/scripts.js"></script>
     </head>
 
 
     <body>
         <div class="container-fluid">
-            <?php include "include/header/header.php"; ?>
+            <?php include "include/header.php"; ?>
             <section class="row">
                 <div class="col-md-12">
                     <?php include "notifications-CONTENT.php"; ?>
@@ -27,8 +31,6 @@ include 'include/connection.php';
             <?php //include "footer.php"; ?>
         </div>
     
-        <script src=\"js/jquery.min.js\"></script>
-        <script src=\"js/bootstrap.min.js\"></script>
-        <script src=\"js/scripts.js\"></script>
+
     </body>
 </html>

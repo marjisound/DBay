@@ -161,3 +161,4 @@ if (!(mysqli_stmt_fetch($stmt))){ // No notifications to show
 mysqli_stmt_close($stmt);
 
 ?>
+

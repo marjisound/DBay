@@ -59,7 +59,7 @@ require_once'include/functions.php';
             $query = "INSERT INTO `item` (`seller_id`, `item_name`, `item_description`, `item_brand`, `item_condition`) VALUES(?, ?, ?, ?, ?)";
            
             $stmt = mysqli_prepare($connection, $query);
-            mysqli_stmt_bind_param($stmt,'isssi' , $_SESSION['userid'], $itemname, $itemdescription, $itemBrand, $condition);
+            mysqli_stmt_bind_param($stmt,'isssi' , $_SESSION['user_id'], $itemname, $itemdescription, $itemBrand, $condition);
             //$resultset could get only true or false
             $result_set = mysqli_stmt_execute($stmt);
 
