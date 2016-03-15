@@ -47,6 +47,7 @@ require_once'include/functions.php';
             $target_dir = "uploads/";
             //if a file has been submitted among other data, it will be stored in the $_FILES
             //pathinfo returns 
+            if(isset($flImage1)):
             $path_parts = pathinfo($_FILES["flImage1"]["name"]);
             $extension = $path_parts['extension'];
             //uniqid() produces a random number as an id
@@ -55,7 +56,7 @@ require_once'include/functions.php';
 
             //
             move_uploaded_file($_FILES["flImage1"]["tmp_name"], $target_file);
-
+            endif;
             $query = "INSERT INTO `item` (`seller_id`, `item_name`, `item_description`, `item_brand`, `item_condition`) VALUES(?, ?, ?, ?, ?)";
            
             $stmt = mysqli_prepare($connection, $query);

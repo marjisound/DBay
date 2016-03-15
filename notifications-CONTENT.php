@@ -1,7 +1,7 @@
 <?php
 
 include "notificationClasses.php";
-$_SESSION["user_id"] = 3; // NB: remove this line in real app
+//$_SESSION["user_id"] = 3; // NB: remove this line in real app
 $userID = $_SESSION["user_id"];
 // The following variables would be used for displaying a limited number of results
 // that the user sets. This feature is not currently implemented
@@ -159,6 +159,10 @@ if (!(mysqli_stmt_fetch($stmt))){ // No notifications to show
     } while (mysqli_stmt_fetch($stmt));
 }
 mysqli_stmt_close($stmt);
+echo 
+'<form class="navbar-form navbar-left" role="search" action="createAuction.php" method="get">
+<button type="submit" name="createAuction" class="btn btn-default">Create Auction</button>
+</form>'
 
 ?>
 

@@ -28,7 +28,7 @@ include 'include/connections.php';
                     <?php include "notifications-CONTENT.php"; ?>
                 </div>
             </section>
-            <?php //include "footer.php"; ?>
+            <?php include "include/footer.php"; ?>
         </div>
     
 
