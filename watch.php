@@ -1,7 +1,7 @@
 <?php
 
-include 'include/session.php';
-include 'include/connection.php';
+include 'include/sessions.php';
+include 'include/connections.php';
 $auctionData = $_SESSION["auction_data"];
 if (!isset($auctionData)){
     $msg = "Problem getting auction data.";
@@ -54,13 +54,13 @@ if (!isset($userID)){
 
     <body>
         <div class="container-fluid">
-            <?php include "include/header/header.php"; ?>
+            <?php include "include/header.php"; ?>
             <section class="row">
                 <div class="col-md-12">
                     <p><?php echo $msg; ?></p>
                 </div>
             </section>
-            <?php //include "footer.php"; ?>
+            <?php include "include/footer.php"; ?>
         </div>
     
         <script src=\"js/jquery.min.js\"></script>

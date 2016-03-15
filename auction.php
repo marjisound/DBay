@@ -4,7 +4,7 @@ include 'include/connections.php';
 //include "connect.php";
 
 $auctionID = $_GET["a_id"];
-$_SESSION["user_id"] = 1; // Delete this line from final app
+//$_SESSION["user_id"] = 1; // Delete this line from final app
 $userID = $_SESSION["user_id"];
 if (!isset($auctionID)){
     echo "no such auction";

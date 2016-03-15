@@ -1,6 +1,7 @@
 <?php
 
 include "notificationClasses.php";
+
 //$_SESSION["user_id"] = 3; // NB: remove this line in real app
 $userID = $_SESSION["user_id"];
 // The following variables would be used for displaying a limited number of results
@@ -99,6 +100,8 @@ mysqli_stmt_close($stmt);
 
 
 // Fetch data about auctions set up by this user
+//echo is_seller($userID);
+if(is_seller($userID)):
 $stmt = mysqli_stmt_init($connection);
 $stmt = mysqli_prepare($connection, "SELECT a.auction_id, i.item_name,
                                           a.start_price, a.reserve_price,
@@ -162,7 +165,7 @@ mysqli_stmt_close($stmt);
 echo 
 '<form class="navbar-form navbar-left" role="search" action="createAuction.php" method="get">
 <button type="submit" name="createAuction" class="btn btn-default">Create Auction</button>
-</form>'
-
+</form>';
+endif;
 ?>
 

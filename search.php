@@ -15,7 +15,7 @@
 	<title>Search</title>
 </head>
 <body>
-	<?php include'/include/header.php' ?>
+	<?php include'include/header.php' ?>
 	<?php
 		if(isset($_GET['user_query'])):
 			$user_query = htmlspecialchars($_GET['user_query']);

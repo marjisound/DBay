@@ -2,6 +2,8 @@
 include 'include/sessions.php';
 include 'include/connections.php';
 require_once'include/functions.php';
+confirm_login();
+confirm_isseller();
 
 //$_SESSION['userid'] = 1;
 

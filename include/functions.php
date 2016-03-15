@@ -246,4 +246,30 @@ function has_next($array) {
         return false;
     }
 }
+//checks seller or buyer
+function is_seller($id)
+{
+	global $connection;
+	$id = mysqli_prep($id);
+	$query = "SELECT is_seller FROM users WHERE user_id = ".$id;
+	$result = mysqli_query($connection, $query);
+	if(!empty($result)):
+		$rows = $result->fetch_assoc();
+		$seller_id =$rows['is_seller'];
+		if($seller_id == 1):
+			return True;
+		else:
+			return False;
+		endif;
+	endif;
+}
+function confirm_isseller()
+{
+	$isseller = is_seller($_SESSION['user_id']);
+	if(!$isseller):
+		redirect_to('index.php');
+	endif;
+}
+
+
 ?>

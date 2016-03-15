@@ -107,7 +107,7 @@ if ($userBid >= $minNewBid){
                     <p><a href=\"auction.php?a=$auctionID\">Return to auction page</a></p>"; ?>
                 </div>
             </section>
-            <?php //include "footer.php"; ?>
+            <?php include "include/footer.php"; ?>
         </div>
     
         <script src=\"js/jquery.min.js\"></script>
