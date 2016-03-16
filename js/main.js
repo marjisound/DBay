@@ -55,4 +55,6 @@ $(document).ready(function(){
     starOff: 'star-off-big.png',
     starOn: 'star-on-big.png'
   });
+
+   
 });

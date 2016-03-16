@@ -133,6 +133,7 @@
 					foreach($result as $rows):
 						$name = $rows['item_name'];
 						$curr_price = $rows['item_description'];
+						$item_image = $rows['file_name'];
 						$reserve_price = $rows['reserve_price'];
 						$a_id = $rows['auction_id'];
 						$enddate = $rows['end_date'];
@@ -142,9 +143,14 @@
 				'<div class="container-fluid">
 					<div class="rows">
 						<section class="col-xs-4">
-							<!--for image -->
-							<img src="http://www.aviatorcameragear.com/wp-content/uploads/2012/07/placeholder.jpg" class="img-rounded" style="width:150px">
-						</section>
+							<!--for image -->';
+							if (!empty($item_image)) {
+								echo '<img src="uploads/'.$item_image.'" class="img-rounded" style="width:150px">';
+							}else{
+								echo '<img src="http://www.aviatorcameragear.com/wp-content/uploads/2012/07/placeholder.jpg" class="img-rounded" style="width:150px">';
+							}
+						echo	
+						'</section>
 						<section class="col-md-8">
 							<h3 class=""><a href=auction.php?a_id='.$a_id.'>'.$name.'</a></h3>
 							<ul class="search-list">
