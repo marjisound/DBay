@@ -128,7 +128,7 @@
 			<section class="col-md-6">
 				
 				<?php
-				if(isset($result)):
+				if(!empty($result)):
 				if(!empty($result->fetch_assoc())):
 					foreach($result as $rows):
 						echo "<pre>";
@@ -147,23 +147,23 @@
 				'<div class="container-fluid">
 					<div class="rows">
 						<section class="col-xs-4">
-<<<<<<< HEAD
-							<!--for image -->'
+
+							<!--for image -->';
 							 if(!empty($img)):
-								<img src= $img  class="img-rounded" style="width:150px">
+								echo '<img src= $img  class="img-rounded" style="width:150px">';
 								else:
-							<img src="http://www.aviatorcameragear.com/wp-content/uploads/2012/07/placeholder.jpg" class="img-rounded" style="width:150px">
+							echo '<img src="http://www.aviatorcameragear.com/wp-content/uploads/2012/07/placeholder.jpg" class="img-rounded" style="width:150px">';
 							endif;
 							
-=======
-							<!--for image -->';
+
+							echo '<!--for image -->';
 							if (!empty($item_image)) {
 								echo '<img src="uploads/'.$item_image.'" class="img-rounded" style="width:150px">';
 							}else{
 								echo '<img src="http://www.aviatorcameragear.com/wp-content/uploads/2012/07/placeholder.jpg" class="img-rounded" style="width:150px">';
 							}
 						echo	
->>>>>>> origin/master
+
 						'</section>
 						<section class="col-md-8">
 							<h3 class=""><a href=auction.php?a_id='.$a_id.'>'.$name.'</a></h3>
@@ -183,11 +183,11 @@
 				 <hr/>';
 				 endforeach;
 				 freeresult($result);
+				endif;
 				else:
 					echo '<div class=""> 
 							"your search returned no result"
 							</div>';
-				endif;
 				endif;
 				?>
  	</div>
