@@ -163,8 +163,8 @@ if (!(mysqli_stmt_fetch($stmt))){ // No notifications to show
 }
 mysqli_stmt_close($stmt);
 echo 
-'<form class="navbar-form navbar-left" role="search" action="createAuction.php" method="get">
-<button type="submit" name="createAuction" class="btn btn-default">Create Auction</button>
+'<form class="navbar-form navbar-left" role="search" action="createAuction.php" method="post">
+<button type="submit" name="createAuction" class="btn btn-primary">Create Auction</button>
 </form>';
 endif;
 ?>

@@ -1,6 +1,8 @@
 <?php
 include 'include/sessions.php';
 include 'include/connections.php';
+include 'include/functions.php';
+confirm_login();
 //include "connect.php";
 
 $auctionID = $_GET["a_id"];

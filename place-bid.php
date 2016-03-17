@@ -38,7 +38,7 @@ mysqli_stmt_close($stmt);
 /*
 if ( $userID == $sellerID ){
 $_SESSION["bidStatus"] = array("auction" => $auctionID, "status" => "RESTRICTED", "when" => date("Y-m-d H:i:s"));
-header("Location: auction.php?auction-id=$auctionID");
+header("Location: auction.php?a_iduction-id=$auctionID");
 }
 */
 
@@ -104,7 +104,7 @@ if ($userBid >= $minNewBid){
             <section class="row">
                 <div class="col-md-12">
                     <?php echo "<div class=\"alert alert-$status\"><p>$message</p></div>
-                    <p><a href=\"auction.php?a=$auctionID\">Return to auction page</a></p>"; ?>
+                    <p><a href=\"auction.php?a_id=$auctionID\">Return to auction page</a></p>"; ?>
                 </div>
             </section>
             <?php include "include/footer.php"; ?>

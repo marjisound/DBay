@@ -131,20 +131,29 @@
 				if(isset($result)):
 				if(!empty($result->fetch_assoc())):
 					foreach($result as $rows):
+						echo "<pre>";
+						print_r($rows);
+						echo "</pre>";
 						$name = $rows['item_name'];
 						$curr_price = $rows['item_description'];
 						$reserve_price = $rows['reserve_price'];
 						$a_id = $rows['auction_id'];
 						$enddate = $rows['end_date'];
+						$img = $rows['file_name'];
 						$timetoend = time_to_end($enddate);
 						echo 
 
 				'<div class="container-fluid">
 					<div class="rows">
 						<section class="col-xs-4">
-							<!--for image -->
+							<!--for image -->'
+							 if(!empty($img)):
+								<img src= $img  class="img-rounded" style="width:150px">
+								else:
 							<img src="http://www.aviatorcameragear.com/wp-content/uploads/2012/07/placeholder.jpg" class="img-rounded" style="width:150px">
-						</section>
+							endif;
+							
+						'</section>
 						<section class="col-md-8">
 							<h3 class=""><a href=auction.php?a_id='.$a_id.'>'.$name.'</a></h3>
 							<ul class="search-list">

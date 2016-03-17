@@ -190,11 +190,12 @@ function user_search($user_query,$limString,$resString)
 	echo "you searched for: ".$user_query;
 	// Need only items that are currentyl auctioned.
 	$query = "SELECT  * ";
-	$query .= "FROM auction a ";
+	$query .= "FROM auction a  ";
 	$query .= "JOIN item i ON ";
 	$query .= "i.item_id = a.item_id ";
+	$query .=  "JOIN image im ON im.item_id = i.item_id ";
 	$query .= "WHERE item_name LIKE ".'"%'.$user_query.'%" ';
-	$query .= "AND DATEDIFF(a.end_date,NOW()) > 0 ";
+	$query .= "AND a.end_date >= Now() ";
 	if(!empty($resString)):
 	$query .= "AND ".$resString;
 	endif;
