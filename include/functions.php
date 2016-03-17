@@ -194,10 +194,6 @@ function user_search($user_query,$limString,$resString)
 	$query .= "JOIN item i ON ";
 	$query .= "i.item_id = a.item_id ";
 
-	$query .=  "JOIN image im ON im.item_id = i.item_id ";
-	$query .= "WHERE item_name LIKE ".'"%'.$user_query.'%" ';
-	$query .= "AND a.end_date >= Now() ";
-
 	$query .= "left JOIN image ON ";
 	$query .= "image.item_id = a.item_id ";
 	$query .= "and image.is_cover_image = 1 ";

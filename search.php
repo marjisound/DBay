@@ -131,16 +131,13 @@
 				if(!empty($result)):
 				if(!empty($result->fetch_assoc())):
 					foreach($result as $rows):
-						echo "<pre>";
-						print_r($rows);
-						echo "</pre>";
 						$name = $rows['item_name'];
 						$curr_price = $rows['item_description'];
 						$item_image = $rows['file_name'];
 						$reserve_price = $rows['reserve_price'];
 						$a_id = $rows['auction_id'];
 						$enddate = $rows['end_date'];
-						$img = $rows['file_name'];
+						$img_id = $rows['image_id'];
 						$timetoend = time_to_end($enddate);
 						echo 
 
