@@ -49,7 +49,7 @@ confirm_isseller();
             $target_dir = "uploads/";
             //if a file has been submitted among other data, it will be stored in the $_FILES
             //pathinfo returns 
-            if(isset($flImage1)):
+            if(isset($_FILES["flImage1"])):
             $path_parts = pathinfo($_FILES["flImage1"]["name"]);
             $extension = $path_parts['extension'];
             //uniqid() produces a random number as an id

@@ -30,10 +30,10 @@ mysqli_stmt_close($stmt);
 
 // Fetch item details
 $stmt = mysqli_stmt_init($connection);
-$stmt = mysqli_prepare($connection, "SELECT * FROM `item` WHERE `item_id` = ?");
+$stmt = mysqli_prepare($connection, "SELECT item.*, `image`.`file_name` FROM `item` LEFT JOIN `image` ON `item`.`item_id` = `image`.`item_id` AND `image`.`is_cover_image` = 1 WHERE `item`.`item_id` = ?");
 mysqli_stmt_bind_param($stmt, "i", $itemID);
 mysqli_stmt_execute($stmt );
-mysqli_stmt_bind_result($stmt, $itemID, $sellerID, $itemName, $itemDescription, $itemBrand, $itemCondition);
+mysqli_stmt_bind_result($stmt, $itemID, $sellerID, $itemName, $itemDescription, $itemBrand, $itemCondition, $item_image);
 if (!(mysqli_stmt_fetch($stmt))){
     echo "failed to fetch item details";
     //header("Location:noconnect.php");
@@ -211,6 +211,21 @@ $_SESSION["auction_data"] = array ("auction_id" => $auctionID,
 
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link href="css/style.css" rel="stylesheet">
+        <script type="text/javascript" src="js/jquery-1.12.0.js"></script>
+        <script src="js/bootstrap/bootstrap.js"></script>
+        <script src="js/countdown.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function(){
+            $('#getting-started').countdown($("#getting-started").html(), function(event) {
+                $(this).html(event.strftime('%d days %H:%M:%S'));
+            })
+            .on('finish.countdown', function(event) {
+                document.location.href = document.location.href;
+ 
+            });
+
+        });
+</script>
     </head>
 
 
@@ -224,9 +239,5 @@ $_SESSION["auction_data"] = array ("auction_id" => $auctionID,
             </section>
             <?php //include "footer.php"; ?>
         </div>
-    
-        <script src=\"js/jquery.min.js\"></script>
-        <script src=\"js/bootstrap.min.js\"></script>
-        <script src=\"js/scripts.js\"></script>
     </body>
 </html>
