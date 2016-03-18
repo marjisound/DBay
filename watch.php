@@ -57,7 +57,9 @@ if (!isset($userID)){
             <?php include "include/header.php"; ?>
             <section class="row">
                 <div class="col-md-12">
-                    <p><?php echo $msg; ?></p>
+                    <?php echo "<p>$msg</p>
+                                <p><a href=\"auction.php?a=$auctionID\">
+                                   Return to auction page</a></p>"; ?>
                 </div>
             </section>
             <?php include "include/footer.php"; ?>
