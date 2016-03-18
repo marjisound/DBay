@@ -57,29 +57,29 @@ $minNewBid = max($maxBid+0.01,$auctionData["start_price"]);
 
 
 // Enter bid or fail according to bid value (and date)
-if ($userBid >= $minNewBid){
-    if(date("Y-m-d H:i:s") < $auctionData["end_date"]){
+if(date("Y-m-d H:i:s") < $auctionData["end_date"]){
+    if ($userBid >= $minNewBid){
         $stmt = mysqli_stmt_init($connection);
-		$stmt = mysqli_prepare($connection, "INSERT INTO `bid`
-                                       VALUES (?, ?, ?, NOW())
-                                       ");//   user, auction, amount 
+        $stmt = mysqli_prepare($connection, "INSERT INTO `bid`
+                                             VALUES (?, ?, ?, NOW())
+                                            ");//   user, auction, amount 
         mysqli_stmt_bind_param($stmt, "iid", $userID, $auctionID, $userBid);
         mysqli_stmt_execute($stmt);
-		$stmt = mysqli_stmt_init($connection);
-		$stmt = mysqli_prepare($connection, "UPDATE `auction` SET `buyer_id` = ?
-							   WHERE auction_id = ?");
-		mysqli_stmt_bind_param($stmt,"ii",$userID,$auctionID);
-		mysqli_stmt_execute($stmt);
-		mysqli_stmt_close($stmt);
-		$status = "success";
+        $stmt = mysqli_stmt_init($connection);
+        $stmt = mysqli_prepare($connection, "UPDATE `auction` SET `buyer_id` = ?
+	    	                             WHERE auction_id = ?");
+        mysqli_stmt_bind_param($stmt,"ii",$userID,$auctionID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        $status = "success";
         $message = "You have successfully placed a bid of &pound;$userBid for $itemName.";
     } else {
-        $status = "danger";
-		$message = "You have run out of time to bid for $itemName.";
+        $status = "warning";
+	$message = "Your bid was too low. The minimum acceptable bid is &pound;$minNewBid";
     }
 } else {
-    $status = "warning";
-	$message = "Your bid was too low. The minimum acceptable bid is &pound;$minNewBid";
+    $status = "danger";
+    $message = "You have run out of time to bid for $itemName.";
 }
 ?>
 
