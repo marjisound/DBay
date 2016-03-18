@@ -59,7 +59,7 @@ require_once('include/functions.php');
                        '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Logout</b> <span class="caret"></span></a>
                         <ul id="login-dp" class="dropdown-menu">
                             <div class="bottom text-center">
-                                <a href="account.php"><b>Edit your profile</b></a>
+                                <a href="account.php?edit"><b>Edit your profile</b></a>
                             </div>
                             <a href="logout.php"><b>Logout</b></a>
                         </ul>';

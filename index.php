@@ -2,6 +2,9 @@
 include 'include/sessions.php';
 include 'include/connections.php';
 require_once'include/functions.php';
+
+
+
 ?>
 <!doctype html>
 <html>
@@ -24,44 +27,28 @@ require_once'include/functions.php';
         ?>
     </div>
 
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="3000">
-      <!-- Indicators -->
-      <ol class="carousel-indicators">
-        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-      </ol>
- 
-      <!-- Wrapper for slides -->
-      <div class="carousel-inner">
-        <div class="item active">
-          <img src="http://placehold.it/1200x315" alt="...">
-          <div class="carousel-caption">
-              <h3>Caption Text</h3>
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x315" alt="...">
-          <div class="carousel-caption">
-              <h3>Caption Text</h3>
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x315" alt="...">
-          <div class="carousel-caption">
-              <h3>Caption Text</h3>
-          </div>
-        </div>
-      </div>
- 
-      <!-- Controls -->
-      <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-      </a>
-      <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-      </a>
-    </div> <!-- Carousel -->
+    <?php
+      $query = "SELECT item.item_name, item.item_description, auction.end_date, auction.auction_id, image.file_name
+              FROM item JOIN auction 
+              ON item.item_id = auction.item_id 
+              JOIN image ON item.item_id = image.item_id
+              WHERE auction.end_date > now() 
+              ORDER BY RAND() LIMIT 3";
+              
+      $result = mysqli_query($connection, $query);
+      while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
+        echo '<div class="col-sm-4">
+                <img src="uploads/'.$row['file_name'].'" height="200" width="180"><br>
+                <a href="auction.php?a_id='.$row['auction_id'].'">'.$row['item_name'].'</a>
+                 <p>'.$row['item_description'].'</p>
+                 <p>End date: '.$row['end_date'].'</p>
+              </div>';
+
+      }
+      mysqli_free_result($result);
+
+
+    ?>
 
 
     <!-- Footer section -->
