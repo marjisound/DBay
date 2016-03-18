@@ -48,7 +48,6 @@ $stmt = mysqli_stmt_init($connection);
 $stmt = mysqli_prepare($connection, "SELECT MAX(`price`)
                                 FROM `bid`
                                 WHERE `auction_id` = ?
-                                GROUP BY `auction_id`
                                ");
 mysqli_stmt_bind_param($stmt, "i", $auctionID);
 mysqli_stmt_execute($stmt);
