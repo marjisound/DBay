@@ -34,7 +34,7 @@ require_once('include/functions.php');
                                     $query = "select * from category";
                                     $result_set = mysqli_query($connection, $query);
                                     while($row = mysqli_fetch_assoc($result_set)){
-                                        echo '<li value="'.$row['category_id'].'"><a href="search.php">'.$row['category_name'].'</a></li>';
+                                        echo '<li value="'.$row['category_id'].'"><a href="search.php?category_id='.$row['category_id'].'">'.$row['category_name'].'</a></li>';
                                     }
                                     mysqli_free_result($result_set);
                                 ?>

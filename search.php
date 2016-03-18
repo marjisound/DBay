@@ -12,13 +12,30 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/search.css">
+	<link rel="stylesheet" type="text/css" href="css/header.css">
 	<title>Search</title>
 </head>
 <body>
+
+	<div class="container">
 	<?php include'include/header.php' ?>
 	<?php
+
+	// function cat_search($category_id) {
+	// 	$query = mysqli_stmt_init($connection);
+	// 		$query = mysqli_prepare($connection, "SELECT item_name FROM item JOIN category WHERE category.category_id = ?");
+
+	// 		mysqli_stmt_bind_param($query, "i", $category_id);
+	// 		mysqli_stmt_execute($query);
+	// 		$result = mysqli_stmt_get_result($query);
+	// 		mysqli_stmt_close($query);
+	// 		return $cat_result;
+	// }
+
+
 		if(isset($_GET['user_query'])):
 			$user_query = htmlspecialchars($_GET['user_query']);
+			echo "MARJAN: ".$user_query;
 		else:
 			$user_query="";
 		endif;
@@ -72,10 +89,14 @@
 				$limString= "";
 				$curr_lim='';
 		endif;
+
+		if(isset($_GET['category_id'])):
+			$category_id = $_GET['category_id'];
+			// $result = cat_search($category_id);
+
+		endif;
 		$result = user_search($user_query,$limString,$resString);
 	?>
-	
-	<div class="container-fluid">
 		<div class="row">
 			<section class="col-sm-6">
 				<h1></h1>
@@ -141,7 +162,7 @@
 						$timetoend = time_to_end($enddate);
 						echo 
 
-				'<div class="container-fluid">
+				'
 					<div class="rows">
 						<section class="col-xs-4">
 
@@ -155,8 +176,8 @@
 
 						'</section>
 						<section class="col-md-8">
-							<h3 class=""><a href=auction.php?a_id='.$a_id.'>'.$name.'</a></h3>
-							<ul class="search-list">
+							<h3 class="" style="margin-left: 20px;"><a href=auction.php?a_id='.$a_id.'>'.$name.'</a></h3>
+							<ul class="search-list" style="margin-left: -15px;">
 								<li class="">
 									<span class="bold"><b>Description</b> :'. $curr_price.'</span>
 								</li>
@@ -167,7 +188,7 @@
 							'</ul>
 						</section>
 					</div>
-				</div>
+				
 				<div class="clearfix visible-sm"></div>
 				 <hr/>';
 				 endforeach;

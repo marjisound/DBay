@@ -211,6 +211,18 @@ function user_search($user_query,$limString,$resString)
 	$result = mysqli_query($connection,$query);
 	return $result;
 }
+
+// function user_cat_search($category_id) {
+// 	$query = mysqli_stmt_init($connection);
+// 	$query = mysqli_prepare($connection, "SELECT item_name FROM item JOIN category WHERE category.category_id = ?");
+
+// 	mysqli_stmt_bind_param($query, "i", $category_id);
+// 	mysqli_stmt_execute($query);
+// 	$result = mysqli_stmt_get_result($query);
+// 	mysqli_stmt_close($query);
+// 	return $result;
+// }
+
 function time_to_end($time)
 {
 	$datetime1 = date_create($time);
