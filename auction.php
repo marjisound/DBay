@@ -6,7 +6,6 @@ confirm_login();
 //include "connect.php";
 
 $auctionID = $_GET["a_id"];
-//$_SESSION["user_id"] = 1; // Delete this line from final app
 $userID = $_SESSION["user_id"];
 if (!isset($auctionID)){
     echo "no such auction";
@@ -52,6 +51,7 @@ if (!(mysqli_stmt_fetch($stmt))){
     //header("Location:noconnect.php");
 }
 mysqli_stmt_close($stmt);
+
 
 // Update view count (unless auction is over)
 $auctionOver = $endDate < date("Y-m-d H:i:s");
@@ -220,7 +220,11 @@ $_SESSION["auction_data"] = array ("auction_id" => $auctionID,
                 $(this).html(event.strftime('%d days %H:%M:%S'));
             })
             .on('finish.countdown', function(event) {
-                document.location.href = document.location.href;
+                setTimeout(function(){
+                        document.location.href = document.location.href
+                    },
+                    1000
+                );
  
             });
 

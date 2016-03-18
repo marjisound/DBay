@@ -146,14 +146,6 @@
 						<section class="col-xs-4">
 
 							<!--for image -->';
-							 if(!empty($img)):
-								echo '<img src= $img  class="img-rounded" style="width:150px">';
-								else:
-							echo '<img src="http://www.aviatorcameragear.com/wp-content/uploads/2012/07/placeholder.jpg" class="img-rounded" style="width:150px">';
-							endif;
-							
-
-							echo '<!--for image -->';
 							if (!empty($item_image)) {
 								echo '<img src="uploads/'.$item_image.'" class="img-rounded" style="width:150px">';
 							}else{

@@ -38,7 +38,7 @@ echo "<div class=\"col-sm-4\"><h2>Auction details</h2><dl>
          "<dt>End date</dt><dd>$endDate</dd>
          <dt>Ends in:</dt><dd><div id='getting-started'>".str_replace("-", "/", $endDate)."</div></dd>
           <dt>View count</dt><dd>$viewCount</dd>
-          <dt>Seller</dt><dd><a href=\"user.php?u=$sellerID\">$sellerName</a></dd>
+          <dt>Seller</dt><dd><a href=\"user.php?u=$sellerID&amp;role_type=1\">$sellerName</a></dd>
       </dl></div>";
 
 
@@ -60,6 +60,15 @@ if ($loggedIn ? !($auctionOver or $selling or $watching or $hasBid) : false){
           <button class=\"btn btn-primary\">Watch auction</button></form>";
 }
 
+if($auctionOver){
+  if($selling){
+    echo '<a href="review.php?auction_id='.$auctionID.'&amp;type=1">Seller Comment</a>';
+  }
+  if($winning && $gotReserve){
+    echo '<a href="#">Pay</a>&nbsp;&nbsp;';
+    echo '<a href="review.php?auction_id='.$auctionID.'&amp;type=2">Buyer Comment</a>';
+  }
+}
 
 // Bid history
 

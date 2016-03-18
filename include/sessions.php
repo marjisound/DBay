@@ -1,8 +1,7 @@
 <?php
+	date_default_timezone_set('Europe/London');
 //start the session, should be included in everypage that makes use of Sessions.
 	session_start();
-?>
-<?php
 
 	function message()
 	{

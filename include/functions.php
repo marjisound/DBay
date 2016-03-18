@@ -139,8 +139,8 @@ function user_reg()
     else:
     	$is_seller = 0;
     endif;
-	$query ="INSERT INTO users (user_email,user_password,tel,Postcode,is_seller,is_buyer) ";
-    $query .="VALUES ('$Email','$HPassword','$Phone','$Postcode','$is_seller','1')";  
+	$query ="INSERT INTO users (first_name, last_name, user_email,user_password,tel,Postcode,is_seller,is_buyer) ";
+    $query .="VALUES ('$First_Name', '$Last_Name','$Email','$HPassword','$Phone','$Postcode','$is_seller','1')";  
     $result = mysqli_query($connection,$query);
     return $result;
 }

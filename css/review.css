@@ -1,11 +1,9 @@
 
 .rate-star {
 	cursor: pointer;
-	float: left;
 	background-position: -96px -387px;
 	background-size: 326px 550px;
 	width: 450px;
-	height: 120px;
 }
 
 .comment-field {

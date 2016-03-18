@@ -12,7 +12,7 @@ require_once('include/functions.php');
                 <span class="icon-bar"></span>
             </button>
            <!-- <a class="navbar-brand" href="#">Welcome To Dbay</a> -->
-           <h3 style="color:white"> Welcome To Dbay </h3>
+           <h3 style="color:white; font-size: 25px; margin-right: 20px; margin-bottom: 20px;">Dbay</h3>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -28,19 +28,22 @@ require_once('include/functions.php');
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="notifications.php">Go to notifications</a></li>
                         <li><a href="#">Search By Category</a>
-                            <ul>
-                                <li><a href="search.php">Cat 1 </a>
-                                <li><a href="search.php">Cat 1 </a>
-                                <li><a href="search.php">Cat 1 </a>
-                                <li><a href="search.php">Cat 1 </a>
+                             <ul>
+                                <?php
+                                    $query = "select * from category";
+                                    $result_set = mysqli_query($connection, $query);
+                                    while($row = mysqli_fetch_assoc($result_set)){
+                                        echo '<li value="'.$row['category_id'].'"><a href="search.php">'.$row['category_name'].'</a></li>';
+                                    }
+                                    mysqli_free_result($result_set);
+                                ?>
                             </ul>
                         </li>
                     </ul>
                 </li>
             </ul>
-            <form class="navbar-form navbar-left" role="search" action="search.php" method="get">
+            <form class="navbar-form navbar-left searchField" role="search" action="search.php" method="get">
                 <div class="form-group">
                     <input type="text" class="form-control" name="user_query" placeholder="Search">
                 </div>
@@ -53,11 +56,17 @@ require_once('include/functions.php');
                     <?php
                         if(logged_in()):
                             echo 
-                       '<a href="logout.php"><b>Logout</b></a>';
+                       '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Logout</b> <span class="caret"></span></a>
+                        <ul id="login-dp" class="dropdown-menu">
+                            <div class="bottom text-center">
+                                <a href="account.php"><b>Edit your profile</b></a>
+                            </div>
+                            <a href="logout.php"><b>Logout</b></a>
+                        </ul>';
                         else:
                             echo 
-                    '<li><p class="navbar-text">Already have an account?</p></li>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+                    // <li><p class="navbar-text">Already have an account?</p></li>
+                    '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
                     <ul id="login-dp" class="dropdown-menu">                            
                         <li>
                             <div class="row">
