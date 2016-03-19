@@ -21,16 +21,21 @@
 	<?php include'include/header.php' ?>
 	<?php
 
-	// function cat_search($category_id) {
-	// 	$query = mysqli_stmt_init($connection);
-	// 		$query = mysqli_prepare($connection, "SELECT item_name FROM item JOIN category WHERE category.category_id = ?");
+	function cat_search($category_id) {
+		global $connection;
+		$query = "SELECT item_name";
+		$query .= " FROM item";
+		$query .= " JOIN item_category";
+		$query .= " ON item.item_id = item_category.item_id";
+		$query .= " WHERE item_category.category_id = ?";
+		$stmt = mysqli_prepare($connection, $query);
 
-	// 		mysqli_stmt_bind_param($query, "i", $category_id);
-	// 		mysqli_stmt_execute($query);
-	// 		$result = mysqli_stmt_get_result($query);
-	// 		mysqli_stmt_close($query);
-	// 		return $cat_result;
-	// }
+		mysqli_stmt_bind_param($stmt, "i", $category_id);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+		mysqli_stmt_close($stmt);
+		return $result;
+	}
 
 
 		if(isset($_GET['user_query'])):
@@ -90,12 +95,9 @@
 				$curr_lim='';
 		endif;
 
-		if(isset($_GET['category_id'])):
-			$category_id = $_GET['category_id'];
-			// $result = cat_search($category_id);
+		$category_id = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 
-		endif;
-		$result = user_search($user_query,$limString,$resString);
+		$result = user_search($user_query,$limString,$resString, $category_id);
 	?>
 		<div class="row">
 			<section class="col-sm-6">

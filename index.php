@@ -38,7 +38,7 @@ require_once'include/functions.php';
       $result = mysqli_query($connection, $query);
       while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
         echo '<div class="col-sm-4">
-                <img src="uploads/'.$row['file_name'].'" height="200" width="180"><br>
+                <img src="uploads/'.$row['file_name'].'" height="200" width="200"><br>
                 <a href="auction.php?a_id='.$row['auction_id'].'">'.$row['item_name'].'</a>
                  <p>'.$row['item_description'].'</p>
                  <p>End date: '.$row['end_date'].'</p>

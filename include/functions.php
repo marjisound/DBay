@@ -51,14 +51,16 @@ function validate_min_length($fields_with_min_length)
 }
 function validate_repeat()
 {
-	global $errors;
-	$Email = trim($_POST['Email']);
-	$REmail = trim($_POST['REmail']);
-	$Password = trim($_POST['Password']);
-	$RPassword = trim($_POST['RPassword']);
-	if($Email != $REmail || $Password != $RPassword):
-    	$errors['repeat'] = "either one of repeated email/password did not match";
-	endif;
+	if(!logged_in()){
+		global $errors;
+		$Email = trim($_POST['Email']);
+		$REmail = trim($_POST['REmail']);
+		$Password = trim($_POST['Password']);
+		$RPassword = trim($_POST['RPassword']);
+		if($Email != $REmail || $Password != $RPassword):
+	    	$errors['repeat'] = "either one of repeated email/password did not match";
+		endif;
+	}
 }
 
  //type
@@ -124,25 +126,49 @@ function user_reg()
 {// forms a query for inserting user details and inserts in to database
 // This function is called once $_POST['submit'] is true - check account.php
 	global $connection;
-	$Email = mysqli_prep(trim($_POST['Email']));    
-	$Password = mysqli_prep(trim($_POST['Password']));
-	$HPassword = password_hash($Password,PASSWORD_DEFAULT);
-    $REmail = mysqli_prep(trim($_POST['REmail']));
-    $RPassword = mysqli_prep(trim($_POST['RPassword']));
+
     $First_Name = mysqli_prep(trim($_POST['FName']));
     $Last_Name = mysqli_prep(trim($_POST['LName']));
     $Phone = mysqli_prep(trim($_POST['Phone']));
     $First_Address = mysqli_prep(trim($_POST['FAdd']));
-    $Postcode = mysqli_prep(trim($_POST['Postcode']));
+    $Postcode = mysqli_prep(trim($_POST['postcode']));
+    $addressLine2 = mysqli_prep(trim($_POST['addressLine2']));
+    $city = mysqli_prep(trim($_POST['city']));
+
     if(isset($_POST['Seller'])):
     	$is_seller = 1;
     else:
     	$is_seller = 0;
     endif;
-	$query ="INSERT INTO users (first_name, last_name, user_email,user_password,tel,Postcode,is_seller,is_buyer) ";
-    $query .="VALUES ('$First_Name', '$Last_Name','$Email','$HPassword','$Phone','$Postcode','$is_seller','1')";  
-    $result = mysqli_query($connection,$query);
-    return $result;
+
+	if (!logged_in()) {
+		$Email = mysqli_prep(trim($_POST['Email']));    
+   		$REmail = mysqli_prep(trim($_POST['REmail']));
+		$Password = mysqli_prep(trim($_POST['Password']));
+		$HPassword = password_hash($Password,PASSWORD_DEFAULT);
+		$RPassword = mysqli_prep(trim($_POST['RPassword']));
+
+		$query ="INSERT IGNORE INTO address VALUES ('$Postcode', '$addressLine2','$city')";  
+	    $result = mysqli_query($connection,$query);
+
+
+		$query ="INSERT INTO users (first_name, last_name, user_email,user_password,tel,Postcode,is_seller, addressLine1, is_buyer) ";
+	    $query .="VALUES ('$First_Name', '$Last_Name','$Email','$HPassword','$Phone','$Postcode','$is_seller','$First_Address','1')";  
+	    $result = mysqli_query($connection,$query);
+	    return $result;
+	}
+	else {
+		$query ="INSERT IGNORE INTO address VALUES ('$Postcode', '$addressLine2','$city')";  
+	    $result = mysqli_query($connection,$query);
+
+		$query ="UPDATE users set first_name = '$First_Name', 
+				last_name = '$Last_Name', tel = '$Phone',
+				Postcode = '$Postcode',is_seller = '$is_seller', 
+				addressLine1 = '$First_Address'
+				where user_id = ".$_SESSION['user_id'];
+	    $result = mysqli_query($connection,$query);
+	    return $result;
+	}
 }
 function find_user($user_email)
 {
@@ -183,7 +209,7 @@ function get_email($id)
 }
 // searching
 
-function user_search($user_query,$limString,$resString)
+function user_search($user_query,$limString,$resString, $category_id = 0)
 {
 	global $connection;
 	$user_query = mysqli_prep($user_query);
@@ -197,9 +223,18 @@ function user_search($user_query,$limString,$resString)
 	$query .= "left JOIN image ON ";
 	$query .= "image.item_id = a.item_id ";
 	$query .= "and image.is_cover_image = 1 ";
-	$query .= "WHERE item_name LIKE ".'"%'.$user_query.'%" ';
+	if($category_id != 0){
+		$query .= " JOIN item_category";
+		$query .= " ON i.item_id = item_category.item_id";
+	}
+	$query .= " WHERE a.end_date >= NOW()";
+	if(!empty($user_query))
+		$query .= " AND item_name LIKE ".'"%'.$user_query.'%" ';
+	if($category_id != 0){
+		$query .= " AND item_category.category_id = ".$category_id;
+	}
 	// $query .= "AND DATEDIFF(a.end_date,NOW()) > 0 ";
-	$query .= "AND a.end_date >= NOW()";
+	
 
 	if(!empty($resString)):
 	$query .= "AND ".$resString;
