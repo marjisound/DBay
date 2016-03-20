@@ -73,6 +73,90 @@ if(date("Y-m-d H:i:s") < $auctionData["end_date"]){
         mysqli_stmt_close($stmt);
         $status = "success";
         $message = "You have successfully placed a bid of &pound;$userBid for $itemName.";
+
+        $query = "select item.item_name from auction join item on auction.item_id = item.item_id where auction_id = ?";
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "i", $auctionID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $itemName);
+        mysqli_stmt_close($stmt);
+
+        $query = "select distinct users.user_id, concat(users.first_name, ' ', users.last_name) as user_name, users.user_email
+                from bid
+                left join users
+                on bid.buyer_id = users.user_id
+                where bid.auction_id = ?";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "i", $auctionID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $userID, $userName, $userEmail);
+
+        $siteAddress = 'http://localhost/';
+        $emailSubject = "DBay Website new bid notification";
+        $emailMessage = '
+        <html>
+        <body>
+        Dear <b>{tagName}</b>,<br />
+        <br />
+        You are receiving this email because you are watching/bidding an auction for which a new bid has been placed on.<br />
+        Item name: <b>'.$itemName.'</b><br />
+        To access this auction page on our website please <a href="'.$siteAddress.'auction.php?a_id='.$auctionID.'" target="_blank">click here</a><br />
+        <br />
+        Thank you.
+        </body>
+        </html>
+        ';
+        $headers = "From: auction@dbay.com" .PHP_EOL;
+        //$headers .= "CC: marji_sound@yahoo.com" .PHP_EOL;
+        $headers .= "MIME-Version: 1.0" .PHP_EOL;
+        $headers .= "Content-type:text/html;charset=UTF-8" .PHP_EOL;
+
+        while (mysqli_stmt_fetch($stmt)) {
+            if($userID != $_SESSION['user_id']){
+                $body = $emailMessage;
+                $body = str_replace('{tagName}', $userName, $body);
+                //echo $body;
+                
+                mail($userEmail, $emailSubject, $body, $headers);
+            }
+        }
+        mysqli_stmt_close($stmt);
+    
+        $query = "select users.user_id, concat(users.first_name, ' ', users.last_name) as user_name, users.user_email
+                from bid
+                left join users
+                on bid.buyer_id = users.user_id
+                where bid.auction_id = ?
+                and bid.price = ?";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "id", $auctionID, $maxBid);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $userID, $userName, $userEmail);
+        if(mysqli_stmt_fetch($stmt)) {
+            if($userID != $_SESSION['user_id']){
+                $emailSubject = "DBay Website auction outbid notification";
+                $body = '
+                <html>
+                <body>
+                Dear <b>'.$userName.'</b>,<br />
+                <br />
+                You are receiving this email because you are bidding an auction for which a new bid has been placed on and you have been outbidded.<br />
+                Item name: <b>'.$itemName.'</b><br />
+                To access this auction page on our website please <a href="'.$siteAddress.'auction.php?a_id='.$auctionID.'" target="_blank">click here</a><br />
+                <br />
+                Thank you.
+                </body>
+                </html>
+                ';
+
+                //echo $body;
+                
+                mail($userEmail, $emailSubject, $body, $headers);
+            }
+        }
+
     } else {
         $status = "warning";
 	$message = "Your bid was too low. The minimum acceptable bid is &pound;$minNewBid";

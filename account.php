@@ -39,7 +39,7 @@
         mysqli_stmt_bind_result($stmt, $email, $is_seller, $addressLine1,
         $postcode, $tel, $first_name, $last_name, $addressLine2, $city);
         if (!(mysqli_stmt_fetch($stmt))){
-        echo "failed to fetch acution details";
+        echo "failed to fetch user details";
         //header("Location:noconnect.php");
         }
         mysqli_stmt_close($stmt);
