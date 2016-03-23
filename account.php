@@ -91,7 +91,8 @@ endif;
             <form method = "post" action= "account.php" class="register">
                 <?php
                 if(isset($_SESSION['message']) && logged_in()):
-                    echo $_SESSION['message'].'<br />';
+                    echo '<div style="font-size: 15px;" class="alert alert-info">' . $_SESSION['message'].'</div>';
+                    $_SESSION['message'] = null;
                 endif;
                 ?>
                 <h1><?php echo (!isset($_SESSION['user_id']))? 'Registration' : 'Update Profile';?></h1>
@@ -166,11 +167,19 @@ endif;
                  
                 </fieldset> -->
                 <fieldset class="row4">
+                    <?php if(!isset($_SESSION['user_id'])):?>
                     <legend>Terms and Mailing
                     </legend>
+                     <?php endif;?>
                     <p class="agreement">
-                        <input type="checkbox" name = "Seller" value=""  />
-                        <label> Do you also want to be a seller? <a href="#"></a></label>
+                         <?php 
+                        
+                       
+                        if (!$is_seller) {
+                            echo '<input type="checkbox" name = "Seller" value=""  />
+                            <label> Do you also want to be a seller? <a href="#"></a></label>';
+                        }
+                        ?>
                     </p>
                     <?php if(!isset($_SESSION['user_id'])):?>
                     <p class="agreement">

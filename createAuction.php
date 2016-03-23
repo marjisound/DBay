@@ -25,9 +25,9 @@ confirm_isseller();
         if($cmbCategory==='0'){
             $error.="<br /> Item category";
         }
-        if(empty($itemBrand)) {
-            $error.="<br /> Item brand";
-        }
+        // if(empty($itemBrand)) {
+        //     $error.="<br /> Item brand";
+        // }
         if(empty($itemdescription)) {
             $error.="<br />description";
         }

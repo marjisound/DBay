@@ -209,7 +209,7 @@ function get_email($id)
 }
 // searching
 
-function user_search($user_query,$limString,$resString, $category_id = 0)
+function user_search($user_query,$limString,$resString, $category_id = '')
 {
 	global $connection;
 	$user_query = mysqli_prep($user_query);
@@ -237,12 +237,11 @@ function user_search($user_query,$limString,$resString, $category_id = 0)
 	
 
 	if(!empty($resString)):
-	$query .= "AND ".$resString;
+	$query .= " AND ".$resString;
 	endif;
 	if(!empty($limString)):
 	$query .= $limString;
 	endif;
-	echo $query;
 	$result = mysqli_query($connection,$query);
 	return $result;
 }

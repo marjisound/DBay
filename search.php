@@ -40,7 +40,7 @@
 
 		if(isset($_GET['user_query'])):
 			$user_query = htmlspecialchars($_GET['user_query']);
-			echo "MARJAN: ".$user_query;
+			// echo "MARJAN: ".$user_query;
 		else:
 			$user_query="";
 		endif;
@@ -49,15 +49,15 @@
 			switch ($rev_identifier)
 			 {
 				case 'r1':
-					$resString = "reserve_price BETWEEN 0 AND 30 ";
+					$resString = " reserve_price BETWEEN 0 AND 30 ";
 					$curr_res ="r1";
 					break;
 				case 'r2':
-					$resString = "reserve_price BETWEEN 30 AND 100 ";
+					$resString = " reserve_price BETWEEN 30 AND 100 ";
 					$curr_res ="r2";
 					break;
 				case 'r3':
-					$resString = "reserve_price >= 100 ";
+					$resString = " reserve_price >= 100 ";
 					$curr_res ="r3";
 					break;
 				default:
@@ -74,11 +74,11 @@
 			switch ($limit)
 			 {
 				case '5':
-					$limString = "LIMIT 5";
+					$limString = " LIMIT 5";
 					$curr_lim='5';
 					break;
 				case '10':
-					$limString = "LIMIT 10";
+					$limString = " LIMIT 10";
 					$curr_lim='10';
 					break;
 				case 'm':
@@ -95,10 +95,12 @@
 				$curr_lim='';
 		endif;
 
-		$category_id = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
+		$category_id = isset($_GET['category_id']) ? (int)$_GET['category_id'] : '';
 
 		$result = user_search($user_query,$limString,$resString, $category_id);
-	?>
+
+
+		?>
 		<div class="row">
 			<section class="col-sm-6">
 				<h1></h1>
@@ -110,11 +112,21 @@
     								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Order By Category
     								<span class="caret"></span>
     								</button>
-   									 <ul class="dropdown-menu">
+    								<ul class="dropdown-menu">
+    								<?php
+	                                    $query = "select * from category";
+	                                    $result_set = mysqli_query($connection, $query);
+	                                    while($row = mysqli_fetch_assoc($result_set)){
+	                                        echo '<li value="'.$row['category_id'].'"><a href="search.php?category_id='.$row['category_id'].'&res='.$curr_res.'&limit='.$limString.'">'. $row['category_name'].'</a></li>';
+	                                    }
+	                                    mysqli_free_result($result_set);
+                                	?>
+   									<!--  <ul class="dropdown-menu">
     									  <li><a href="#">Cat1</a></li>
      									 <li><a href="#">Cat2</a></li>
      								 	<li><a href="#">Cat3</a></li>
-   								 	</ul>
+   								 	</ul> -->
+
   								</div>		
                             </li>
 							<li>
@@ -124,9 +136,9 @@
     								</button>
     								
    									 <ul class="dropdown-menu">
-     									 <li><a href='search.php?user_query=<?php echo $user_query;?>&res=r1&limit=<?php echo $curr_lim;?>'>0-30</a></li>
-     								 	<li><a href='search.php?user_query=<?php echo $user_query;?>&res=r2&limit=<?php echo $curr_lim;?>'>30-100</a></li>
-     								 	<li><a href='search.php?user_query=<?php echo $user_query;?>&res=r3&limit=<?php echo $curr_lim;?>'>100 &gt;</a></li>
+     									 <li><a href='search.php?user_query=<?php echo $user_query;?>&res=r1&limit=<?php echo $curr_lim;?>&category_id=<?php echo $category_id ?>'>0-30</a></li>
+     								 	<li><a href='search.php?user_query=<?php echo $user_query;?>&res=r2&limit=<?php echo $curr_lim;?>&category_id=<?php echo $category_id ?>'>30-100</a></li>
+     								 	<li><a href='search.php?user_query=<?php echo $user_query;?>&res=r3&limit=<?php echo $curr_lim;?>&category_id=<?php echo $category_id ?>'>100 &gt;</a></li>
    								    </form>
   								</div>		
                             </li>
@@ -136,9 +148,9 @@
     								<span class="caret"></span>
     								</button>
    									 <ul class="dropdown-menu">
-    									  <li><a href='search.php?user_query=<?php echo $user_query;?>&limit=5&res=<?php echo $curr_res;?>'>5 Items</a></li>
-     									 <li><a href='search.php?user_query=<?php echo $user_query;?>&limit=10&res=<?php echo $curr_res;?>'>10 Items</a></li>
-     								 	<li><a href='search.php?user_query=<?php echo $user_query;?>&limit=m&res=<?php echo $curr_res;?>'>More than 10</a></li>
+    									  <li><a href='search.php?user_query=<?php echo $user_query;?>& limit=5&res=<?php echo $curr_res;?>&category_id=<?php echo $category_id ?>'>5 Items</a></li>
+     									 <li><a href='search.php?user_query=<?php echo $user_query;?>& limit=10&res=<?php echo $curr_res;?>&category_id=<?php echo $category_id ?>'>10 Items</a></li>
+     								 	<li><a href='search.php?user_query=<?php echo $user_query;?>& limit=m&res=<?php echo $curr_res;?>&category_id=<?php echo $category_id ?>'>More than 10</a></li>
    								 	</ul>
   								</div>		
                             </li>

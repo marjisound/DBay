@@ -156,7 +156,6 @@ if(date("Y-m-d H:i:s") < $auctionData["end_date"]){
                 mail($userEmail, $emailSubject, $body, $headers);
             }
         }
-
     } else {
         $status = "warning";
 	$message = "Your bid was too low. The minimum acceptable bid is &pound;$minNewBid";
@@ -178,11 +177,13 @@ if(date("Y-m-d H:i:s") < $auctionData["end_date"]){
 
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link href="css/style.css" rel="stylesheet">
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     </head>
 
 
     <body>
-        <div class="container-fluid">
+        <div class="container">
             <?php include "include/header.php"; ?>
             <section class="row">
                 <div class="col-md-12">
@@ -192,9 +193,6 @@ if(date("Y-m-d H:i:s") < $auctionData["end_date"]){
             </section>
             <?php include "include/footer.php"; ?>
         </div>
-    
-        <script src=\"js/jquery.min.js\"></script>
-        <script src=\"js/bootstrap.min.js\"></script>
-        <script src=\"js/scripts.js\"></script>
+
     </body>
 </html>

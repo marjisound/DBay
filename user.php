@@ -30,68 +30,74 @@ extract($_GET);
         </script>
     </head>
     <body> 
-        <a href="user.php?u=<?php echo $u;?>&amp;role_type=1">Seller</a>
-        &nbsp;-&nbsp;
-        <a href="user.php?u=<?php echo $u;?>&amp;role_type=2">Buyer</a>
-        <?php
-        if($role_type == '2'){
-            // fetch buyer comments
-            $query = "select auction.buyer_comment, auction.buyer_rate, auction.buyer_review_date";
-            $query .= ", concat(u.first_name, ' ', u.last_name) as user_name";
-            $query .= " from auction";
-            $query .= " left join item";
-            $query .= " on auction.item_id = item.item_id";
-            $query .= " left join users as u";
-            $query .= " on auction.buyer_id = u.user_id";
-            $query .= " where item.seller_id = ?";
-            $query .= " and auction.end_date < now()";
-            $query .= " and auction.buyer_review_date is not null";
-            $query .= " order by buyer_review_date desc";
-            $stmt = mysqli_prepare($connection, $query);
-            mysqli_stmt_bind_param($stmt, "i", $u);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_bind_result($stmt, $comment, $rate, $date, $name);
-        }
-        else{
-            // fetch seler comments
-            $query = "select auction.seller_comment, auction.seller_rate, auction.seller_review_date";
-            $query .= ", concat(u.first_name, ' ', u.last_name) as user_name";
-            $query .= " from auction";
-            $query .= " left join item";
-            $query .= " on auction.item_id = item.item_id";
-            $query .= " left join users as u";
-            $query .= " on auction.buyer_id = u.user_id";
-            $query .= " where item.seller_id = ?";
-            $query .= " and auction.end_date < now()";
-            $query .= " and auction.seller_review_date is not null";
-            $query .= " order by seller_review_date desc";
-            $stmt = mysqli_prepare($connection, $query);
-            mysqli_stmt_bind_param($stmt, "i", $u);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_bind_result($stmt, $comment, $rate, $date, $name);
-        }
+        <div class="container-fluid">
+            <?php include "include/header.php"; ?>
+            <?php if ($role_type==1){echo "<strong>";} ?>
+            <a href="user.php?u=<?php echo $u;?>&amp;role_type=1">Buyer</a>
+            <?php if ($role_type==1){echo "</strong>";} ?>
+            &nbsp;-&nbsp;
+            <?php if ($role_type==2){echo "<strong>";} ?>
+            <a href="user.php?u=<?php echo $u;?>&amp;role_type=2">Seller</a>
+            <?php if ($role_type==2){echo "</strong>";} ?>
+            <?php
+            if($role_type == '2'){
+                // fetch buyer comments
+                $query = "select auction.buyer_comment, auction.buyer_rate, auction.buyer_review_date";
+                $query .= ", concat(u.first_name, ' ', u.last_name) as user_name";
+                $query .= " from auction";
+                $query .= " left join item";
+                $query .= " on auction.item_id = item.item_id";
+                $query .= " left join users as u";
+                $query .= " on auction.buyer_id = u.user_id";
+                $query .= " where item.seller_id = ?";
+                $query .= " and auction.end_date < now()";
+                $query .= " and auction.buyer_review_date is not null";
+                $query .= " order by buyer_review_date desc";
+                $stmt = mysqli_prepare($connection, $query);
+                mysqli_stmt_bind_param($stmt, "i", $u);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_bind_result($stmt, $comment, $rate, $date, $name);
+            }
+            else{
+                // fetch seler comments
+                $query = "select auction.seller_comment, auction.seller_rate, auction.seller_review_date";
+                $query .= ", concat(u.first_name, ' ', u.last_name) as user_name";
+                $query .= " from auction";
+                $query .= " left join item";
+                $query .= " on auction.item_id = item.item_id";
+                $query .= " left join users as u";
+                $query .= " on auction.buyer_id = u.user_id";
+                $query .= " where item.seller_id = ?";
+                $query .= " and auction.end_date < now()";
+                $query .= " and auction.seller_review_date is not null";
+                $query .= " order by seller_review_date desc";
+                $stmt = mysqli_prepare($connection, $query);
+                mysqli_stmt_bind_param($stmt, "i", $u);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_bind_result($stmt, $comment, $rate, $date, $name);
+            }
 
-        while (mysqli_stmt_fetch($stmt)) {
-        ?>
+            while (mysqli_stmt_fetch($stmt)) {
+            ?>
 
-        <div class="row">
-            <div class="col-sm-12">
-                <b><?php echo $name.' - '.$date;?></b>:
-                <div>
-                <div class="rate-star" data-score="<?php echo $rate;?>"></div>
+            <div class="row" style="margin: 20px; border: 3px solid gray;">
+                <div class="col-sm-12">
+                    <b><?php echo $name.' - '.$date;?></b>:
+                    <div>
+                    <div class="rate-star" data-score="<?php echo $rate;?>"></div>
+                    </div>
+                    <?php 
+                    if(!empty($comment)){
+                        echo '<div>'.nl2br($comment).'</div><br />';
+                    }
+                    ?>
                 </div>
-                <?php 
-                if(!empty($comment)){
-                    echo '<div>'.nl2br($comment).'</div><br />';
-                }
-                ?>
             </div>
+            <?php
+            }
+            mysqli_stmt_close($stmt);
+            ?>
         </div>
-        <?php
-        }
-        mysqli_stmt_close($stmt);
-        ?>
-
 
     </body>
 </html>

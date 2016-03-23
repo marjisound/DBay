@@ -117,12 +117,22 @@ if ($loggedIn){
     mysqli_stmt_execute($stmt );
     mysqli_stmt_bind_result($stmt, $userHiBid);
     mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
     $watching = ($userHiBid == -0.01);
     $hasBid = isset($userHiBid) ? ($userHiBid != -0.01) : false;
 } else {
     $hasBid = false;
     $watching = false;
 }
+
+$avg_rate = 0;
+$rate_query = "SELECT avg(buyer_rate) FROM `auction` JOIN `item` ON `auction`.`item_id` = `item`.`item_id` WHERE `item`.`seller_id` = ?";
+                $avg_stmt = mysqli_prepare($connection, $rate_query);
+                mysqli_stmt_bind_param($avg_stmt, "i", $sellerID);
+                mysqli_stmt_execute($avg_stmt);
+                mysqli_stmt_bind_result($avg_stmt, $avg_rate);
+                mysqli_stmt_fetch($avg_stmt);
+                mysqli_stmt_close($avg_stmt);
 
 // Set attributes used in page display
 if ($auctionOver){ // auction over
@@ -198,6 +208,7 @@ $_SESSION["auction_data"] = array ("auction_id" => $auctionID,
                                    "end_date" => $endDate
                                    );
 
+
 ?>
 
 <!DOCTYPE html>
@@ -211,7 +222,10 @@ $_SESSION["auction_data"] = array ("auction_id" => $auctionID,
 
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/raty/jquery.raty.css"/>
+        
         <script type="text/javascript" src="js/jquery-1.12.0.js"></script>
+        <script src="js/jquery.raty.js"></script>
         <script src="js/bootstrap/bootstrap.js"></script>
         <script src="js/countdown.js"></script>
         <script type="text/javascript">
@@ -227,6 +241,18 @@ $_SESSION["auction_data"] = array ("auction_id" => $auctionID,
                 );
  
             });
+            
+
+                $('.rate-star').raty({
+                path: 'css/raty/images',
+                starOff: 'star-off.png',
+                starOn: 'star-on.png',
+                readOnly: true,
+                score: function(){
+                    return $(this).attr('data-score');
+                }
+                });
+       
 
         });
 </script>

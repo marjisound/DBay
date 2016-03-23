@@ -1,9 +1,10 @@
 <?php include 'include/sessions.php' ?>
 <?php include 'include/connections.php' ?>
 <?php require_once'include/functions.php' ?>
-confirm_login();
+
 
 <?php 
+confirm_login();
 extract($_POST);
         
     if (isset($btnSubmit)) {
@@ -26,6 +27,8 @@ extract($_POST);
             mysqli_stmt_bind_param($stmt,'isi', $score, $comments, $auction_id);
 
             mysqli_stmt_execute($stmt);
+
+            redirect_to("auction.php?a_id=".$auction_id);
  
         }
      

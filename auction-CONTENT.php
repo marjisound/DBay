@@ -26,7 +26,7 @@ foreach ($categories as $c){
 }
 //mysqli_stmt_close($catStmt);
 echo "</ul>";
-echo '<img src="uploads/'.$item_image.'" class="img-rounded" style="width:350px">';
+echo '<img src="uploads/'.$item_image.'" class="img-rounded" style="width: 350px">';
 echo "</div>";
 
 // Site's stats about auction
@@ -39,7 +39,8 @@ echo "<div class=\"col-sm-4\"><h2>Auction details</h2><dl>
          <dt>Ends in:</dt><dd><div id='getting-started'>".str_replace("-", "/", $endDate)."</div></dd>
           <dt>View count</dt><dd>$viewCount</dd>
           <dt>Seller</dt><dd><a href=\"user.php?u=$sellerID&amp;role_type=1\">$sellerName</a></dd>
-      </dl></div>";
+          <dt>Rating: </dt><dd> <div class=\"rate-star\" data-score=\"$avg_rate\"></div></dd>
+</dl></div>";
 
 
 echo "</div>";

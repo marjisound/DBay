@@ -1,10 +1,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h3>More</h3>
 
             <div class="tabbable-panel">
-                <div class="tabbable-line">
+                <div class="tabbable-line" style="margin-top: 100px;">
                     <ul class="nav nav-tabs ">
                         <li class="active">
                             <a href="#tab_default_1" data-toggle="tab">
@@ -22,41 +21,29 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_default_1">
                             <p>
-                                I'm in Tab 1.
+
                             </p>
                             <p>
-                                Duis autem eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.
+                              Our office hours are Monday to Friday, 9am to 5pm. If you have any issues with DBay website please call us on 07435489245.
+                              You can also email us on <a href="mailto:marji_sound@yahoo.com">help@dbay.com</a>
                             </p>
-                            <p>
-                                <a class="btn btn-success" href="http://j.mp/metronictheme" target="_blank">
-                                    Learn more...
-                                </a>
-                            </p>
+                        
                         </div>
                         <div class="tab-pane" id="tab_default_2">
                             <p>
-                                Howdy, I'm in Tab 2.
+
                             </p>
                             <p>
-                                Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation.
+                                DBay is a website offering peer to peer auction for all kinds of item. DBay was founded in 2016 by Marjan Kalanaki, Thomas Evans and Febin Abraham.
                             </p>
-                            <p>
-                                <a class="btn btn-warning" href="http://j.mp/metronictheme" target="_blank">
-                                    Click for more features...
-                                </a>
-                            </p>
+
                         </div>
                         <div class="tab-pane" id="tab_default_3">
                             <p>
-                                Howdy, I'm in Tab 3.
+
                             </p>
                             <p>
-                                Duis autem vel eum iriure dolor in hendrerit in vulputate. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat
-                            </p>
-                            <p>
-                                <a class="btn btn-info" href="http://j.mp/metronictheme" target="_blank">
-                                    Learn more...
-                                </a>
+                             For all legar issues please contact us directly and we will try our best to solve your issues. 
                             </p>
                         </div>
                     </div>
