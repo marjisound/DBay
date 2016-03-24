@@ -22,7 +22,7 @@ confirm_isseller();
         if($condition==='0'){
             $error.="<br /> Item condition";
         }
-        if($cmbCategory==='0'){
+        if(empty($categories)){
             $error.="<br /> Item category";
         }
         // if(empty($itemBrand)) {
@@ -77,12 +77,12 @@ confirm_isseller();
                 mysqli_stmt_bind_param($stmt,'is' , $item_id, $filename);
                 $result_set = mysqli_stmt_execute($stmt);
 
-                
                 $query = "INSERT INTO `item_category` (`item_id`, `category_id`) VALUES(?, ?)";
                 $stmt = mysqli_prepare($connection, $query);
-                //mysqli_insert_id outputs the last id stored in this set of code
-                mysqli_stmt_bind_param($stmt,'ii' , $item_id, $cmbCategory);
-                $result_set = mysqli_stmt_execute($stmt);
+                foreach($categories as $category){
+                    mysqli_stmt_bind_param($stmt,'ii' , $item_id, $category);
+                    $result_set = mysqli_stmt_execute($stmt);
+                }
 
 
                 //now() + interval ? day will calculate the exact time and date
@@ -203,39 +203,24 @@ confirm_isseller();
                             </div>
 
                              <div>
-                                <label style="font-weight:bold" for="cmbCategory">Item category *</label>
+                                <label style="font-weight:bold" for="cmbCategory">Item categories *</label>
                                 <div>
                                     <br>
                                 </div>
-                                <select name="cmbCategory" id="cmbCategory">
-                                    <option value="0">Please select one</option>
-                                    <?php
-                                      $query = "select * from category";
-                                      var_dump("hello");
-
-                                      $result_set = mysqli_query($connection, $query);
-                                      //find how many rows result has
-                                      //if(mysqli_num_rows($result) > 0){
-                                      //fetch returns false when it reaches after the last row
-                                        while($row = mysqli_fetch_assoc($result_set)){
-                                            echo '<option value="'.$row['category_id'].'">'.$row['category_name'].'</option>';
-                                        }
-
-                                      //}
-                                      //this empties the $result
+                                <?php
+                                $query = "select * from category";
+                                $result_set = mysqli_query($connection, $query);
+                                while($row=mysqli_fetch_assoc($result_set)){
+                                    echo '<label><input type="checkbox"
+                                                        name="categories[]"
+                                                        value="'
+                                                         . $row['category_id']
+                                                         . '">'
+                                                         . $row['category_name']
+                                            . '</label><br>';
+                                }
                                       mysqli_free_result($result_set);
-                                    ?>
-
-                                 <!--    <option value="100">Collectables &amp; antiques</option>
-                                    <option value="200">Home &amp; garden </option>
-                                    <option value="300">Sporting goods</option>
-                                    <option value="400">Electronics</option>
-                                    <option value="500">Jewellery &amp; watches</option>
-                                    <option value="600">Toys &amp; games</option>
-                                    <option value="700">Fashion</option>
-                                    <option value="800">Motors</option>
-                                    <option value="900">Other</option> -->
-                                </select>
+                                ?>
                             </div>
                             <div id="mainDesSection" class="fullWidth" tabindex="-1">
                                  <div id="desType">
